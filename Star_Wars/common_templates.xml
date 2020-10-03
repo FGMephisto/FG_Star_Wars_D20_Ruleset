@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<root version="2.0">
+	<template name="linkednumber">
+		<numberfield>
+			<source mergerule="resetandadd" />
+			<script file="scripts/template_linkednumber.lua" />
+		</numberfield>
+	</template>
+	
+	<template name="modifiernumber">
+		<linkednumber>
+			<nokeyedit />
+			<noreset />
+			<script file="scripts/template_modifiernumber.lua" />
+		</linkednumber>
+	</template>
+	
+	<template name="sheetbonus">
+		<linkednumber>
+			<frame>
+				<name>bonus</name>
+				<offset>5,5,5,5</offset>
+			</frame>
+			<font>sheetnumber</font>
+			<readonly />
+			<displaysign />
+			<noreset />
+		</linkednumber>
+	</template>
+
+	<template name="sheetmodifier">
+		<linkednumber>
+			<frame>
+				<name>modifier</name>
+				<offset>5,5,5,5</offset>
+			</frame>
+			<keyeditframe>
+				<name>sheetfocus</name>
+				<offset>5,5,5,5</offset>
+			</keyeditframe>
+			<stateframe>
+				<drophilight>
+					<name>sheetfocus</name>
+					<offset>5,5,5,5</offset>
+				</drophilight>
+			</stateframe>
+			<droptypes>
+				<type>number</type>
+			</droptypes>
+			<font>sheetnumber</font>
+			<displaysign />
+		</linkednumber>
+	</template>
+
+	<template name="sheetreadonlymodifier">
+		<linkednumber>
+			<frame>
+				<name>modifier</name>
+				<offset>5,5,5,5</offset>
+			</frame>
+			<font>sheetnumber</font>
+			<readonly />
+			<displaysign />
+		</linkednumber>
+	</template>
+
+	<template name="sheetnumber">
+		<linkednumber>
+			<frame>
+				<name>modifier</name>
+				<offset>5,5,5,5</offset>
+			</frame>
+			<keyeditframe>
+				<name>sheetfocus</name>
+				<offset>5,5,5,5</offset>
+			</keyeditframe>
+			<font>sheetnumber</font>
+			<stateframe>
+				<drophilight>
+					<name>sheetfocus</name>
+					<offset>5,5,5,5</offset>
+				</drophilight>
+			</stateframe>
+			<droptypes>
+				<type>number</type>
+			</droptypes>
+		</linkednumber>
+	</template>
+
+	<template name="labeledstring">
+		<stringfield>
+			<font>sheettext</font>
+			<frame>
+				<name>textline</name>
+			</frame>
+			<script>
+				labelwidget = nil;
+			
+				function onInit()
+					labelwidget = addTextWidget("sheetlabelinline", string.upper(label[1]));
+					
+					local w,h = labelwidget.getSize();
+					labelwidget.setPosition("bottomleft", w/2, h/2-5);
+				end
+			</script>
+		</stringfield>
+	</template>
+	
+	<template name="checkbox">
+		<genericcontrol>
+			<stateicons>
+				<on>indicator_checkon</on>
+				<off>indicator_checkoff</off>
+			</stateicons>
+			<script file="scripts/template_checkbox.lua" />
+		</genericcontrol>
+	</template>
+	
+	<template name="tabcontrol">
+		<genericcontrol>
+			<tab mergerule="resetandadd" />
+			<frame>
+				<name>tabs</name>
+			</frame>
+			<script file="scripts/template_tabcontrol.lua" />
+		</genericcontrol>
+	</template>
+	
+	<template name="viewerlist">
+		<genericcontrol>
+			<invalididentityicon>miniportrait_base</invalididentityicon>
+			<portraitset>miniportrait</portraitset>
+			<portraitspacing>21</portraitspacing>
+			<script file="scripts/template_viewerlist.lua" />
+		</genericcontrol>
+	</template>
+
+	<!-- Templates for a column layout on NPC, monster, item, spell sheets -->
+	<template name="columnstringfield">
+		<stringfield>
+			<font>sheettextsmall</font>
+			<frame>
+				<name>modifier</name>
+				<offset>7,5,7,5</offset>
+			</frame>
+			<multilinespacing>15</multilinespacing>
+			<selectioncolor>90ffffff</selectioncolor>
+			<script>
+				function onInit()
+					if anchor then
+						setAnchor("top", anchor[1], "bottom", "relative", 6);
+					else
+						setAnchor("top", "", "top", "absolute", 5);
+					end
+					
+					setAnchor("left", "", "left", "absolute", 85);
+					setAnchor("right", "", "right", "absolute", -7);
+					
+					if getDatabaseNode().isStatic() then
+						setFrame(nil);
+						setFont("chatfont");
+						if getValue() == "" then
+							setVisible(false);
+						end
+					end
+				end
+			</script>
+		</stringfield>
+	</template>
+
+	<template name="columnnumberfield">
+		<numberfield>
+			<noreset />
+			<font>sheettextsmall</font>
+			<frame>
+				<name>modifier</name>
+				<offset>7,4,7,5</offset>
+			</frame>
+			<script>
+				function onInit()
+					if anchor then
+						setAnchor("top", anchor[1], "bottom", "relative", 6);
+					else
+						setAnchor("top", "", "top", "absolute", 5);
+					end
+					
+					setAnchor("left", "", "left", "absolute", 85);
+					setAnchoredWidth(40);
+					setAnchoredHeight(16);
+					
+					if getDatabaseNode().isStatic() then
+						setFont("chatfont");
+					end
+				end
+			</script>
+		</numberfield>
+	</template>
+	
+	<template name="columnfieldlabel">
+		<stringcontrol>
+			<font>sheetlabelsmallbold</font>
+			<script>
+				function onInit()
+					if anchor then
+						if window[anchor[1]].getDatabaseNode().isStatic() then
+							setAnchor("top", anchor[1], "top", "absolute", 2);
+						else
+							setAnchor("top", anchor[1], "top", "absolute", 4);
+						end
+						setAnchor("left", "", "left", "absolute", 0);
+						
+						if not window[anchor[1]].isVisible() then
+							setVisible(false);
+						end
+					end
+				end
+			</script>
+		</stringcontrol>
+	</template>
+
+	<template name="filtertrigger">
+		<genericcontrol>
+			<icon>search_icon</icon>
+			<widgetposition>
+				<anchor>bottomleft</anchor>
+				<offsetx>5</offsetx>
+				<offsety>-5</offsety>
+			</widgetposition>
+			<script>
+				function onInit()
+					window[target[1]].setVisible(false);
+				end
+				
+				function onClickDown(button, x, y)
+					if button == 1 then
+						setVisible(false);
+						window[target[1]].setVisible(true);
+						window[target[1]].setFocus();
+					elseif button == 2 then
+						window[target[1]].setValue("");
+					end
+
+					return true;
+				end
+				
+				function updateWidget(state)
+					if widget and not state then
+						widget.destroy();
+						widget = nil;
+					elseif not widget and state then
+						widget = addBitmapWidget("indicator_checkon");
+						widget.setPosition(widgetposition[1].anchor[1], widgetposition[1].offsetx[1], widgetposition[1].offsety[1]);
+					end
+				end
+			</script>
+		</genericcontrol>
+	</template>
+	
+	<template name="filter">
+		<stringcontrol>
+			<frame>
+				<name>searchframe</name>
+				<offset>37,45,3,12</offset>
+			</frame>
+			<font>sheettext</font>
+			<script file="scripts/template_filter.lua" />
+		</stringcontrol>
+	</template>
+	
+	<template name="linkstringfield">
+		<stringfield>
+			<underlineoffset>-3</underlineoffset>
+			<nodrag />
+			<script file="scripts/template_linkstringfield.lua" />
+		</stringfield>
+	</template>
+	
+	<template name="staticlinkstringfield">
+		<stringfield>
+			<underlineoffset>-3</underlineoffset>
+			<nodrag />
+			<static />
+			<script file="scripts/template_staticlinkstringfield.lua" />
+		</stringfield>
+	</template>
+	
+	<template name="staticlinkstringcontrol">
+		<stringcontrol>
+			<underlineoffset>-3</underlineoffset>
+			<nodrag />
+			<static />
+			<script file="scripts/template_staticlinkstringfield.lua" />
+		</stringcontrol>
+	</template>
+</root>

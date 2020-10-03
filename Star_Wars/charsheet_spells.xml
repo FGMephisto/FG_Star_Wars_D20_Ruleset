@@ -1,0 +1,684 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<root version="2.0">
+	<windowclass name="charsheet_spelllistset">
+		<sizelimits>
+			<minimum>
+				<height>24</height>
+			</minimum>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<script>
+			function updateLabel(source)
+				label.setValue(labelnode.getValue());
+				windowlist.applyFilter();
+			end
+
+			function onInit()
+				local s = string.sub(getDatabaseNode().getName(), 4);
+				labelnode = windowlist.window.getDatabaseNode().createChild("classes.slot" .. s .. ".name", "string")
+				labelnode.onUpdate = updateLabel;
+				updateLabel();
+			end			
+		</script>
+		<sheetdata>
+			<spellsavailable name="availablelevel9">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-5</offset>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>availablelevel0</next>
+					<prev>availablelevel8</prev>
+				</tabtarget>
+			</spellsavailable>
+			<spellsavailable name="availablelevel8">
+				<anchored>
+					<right>
+						<parent>availablelevel9</parent>
+						<anchor>left</anchor>
+						<offset>-2</offset>
+						<relation>relative</relation>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>availablelevel9</next>
+					<prev>availablelevel7</prev>
+				</tabtarget>
+			</spellsavailable>
+			<spellsavailable name="availablelevel7">
+				<anchored>
+					<right>
+						<parent>availablelevel9</parent>
+						<anchor>left</anchor>
+						<offset>-2</offset>
+						<relation>relative</relation>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>availablelevel8</next>
+					<prev>availablelevel6</prev>
+				</tabtarget>
+			</spellsavailable>
+			<spellsavailable name="availablelevel6">
+				<anchored>
+					<right>
+						<parent>availablelevel9</parent>
+						<anchor>left</anchor>
+						<offset>-2</offset>
+						<relation>relative</relation>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>availablelevel7</next>
+					<prev>availablelevel5</prev>
+				</tabtarget>
+			</spellsavailable>
+			<spellsavailable name="availablelevel5">
+				<anchored>
+					<right>
+						<parent>availablelevel9</parent>
+						<anchor>left</anchor>
+						<offset>-2</offset>
+						<relation>relative</relation>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>availablelevel6</next>
+					<prev>availablelevel4</prev>
+				</tabtarget>
+			</spellsavailable>
+			<spellsavailable name="availablelevel4">
+				<anchored>
+					<right>
+						<parent>availablelevel9</parent>
+						<anchor>left</anchor>
+						<offset>-2</offset>
+						<relation>relative</relation>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>availablelevel5</next>
+					<prev>availablelevel3</prev>
+				</tabtarget>
+			</spellsavailable>
+			<spellsavailable name="availablelevel3">
+				<anchored>
+					<right>
+						<parent>availablelevel9</parent>
+						<anchor>left</anchor>
+						<offset>-2</offset>
+						<relation>relative</relation>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>availablelevel4</next>
+					<prev>availablelevel2</prev>
+				</tabtarget>
+			</spellsavailable>
+			<spellsavailable name="availablelevel2">
+				<anchored>
+					<right>
+						<parent>availablelevel9</parent>
+						<anchor>left</anchor>
+						<offset>-2</offset>
+						<relation>relative</relation>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>availablelevel3</next>
+					<prev>availablelevel1</prev>
+				</tabtarget>
+			</spellsavailable>
+			<spellsavailable name="availablelevel1">
+				<anchored>
+					<right>
+						<parent>availablelevel9</parent>
+						<anchor>left</anchor>
+						<offset>-2</offset>
+						<relation>relative</relation>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>availablelevel2</next>
+					<prev>availablelevel0</prev>
+				</tabtarget>
+			</spellsavailable>
+			<spellsavailable name="availablelevel0">
+				<anchored>
+					<right>
+						<parent>availablelevel9</parent>
+						<anchor>left</anchor>
+						<offset>-2</offset>
+						<relation>relative</relation>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>availablelevel1</next>
+					<prev>availablelevel9</prev>
+				</tabtarget>
+			</spellsavailable>
+			
+			<stringcontrol name="availablelevel0label">
+				<anchored>
+					<to>availablelevel0</to>
+					<position>above</position>
+					<offset>0,-4</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<center />
+				<static>0</static>
+			</stringcontrol>
+			<stringcontrol name="availablelevel1label">
+				<anchored>
+					<to>availablelevel1</to>
+					<position>above</position>
+					<offset>0,-4</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<center />
+				<static>1</static>
+			</stringcontrol>
+			<stringcontrol name="availablelevel2label">
+				<anchored>
+					<to>availablelevel2</to>
+					<position>above</position>
+					<offset>0,-4</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<center />
+				<static>2</static>
+			</stringcontrol>
+			<stringcontrol name="availablelevel3label">
+				<anchored>
+					<to>availablelevel3</to>
+					<position>above</position>
+					<offset>0,-4</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<center />
+				<static>3</static>
+			</stringcontrol>
+			<stringcontrol name="availablelevel4label">
+				<anchored>
+					<to>availablelevel4</to>
+					<position>above</position>
+					<offset>0,-4</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<center />
+				<static>4</static>
+			</stringcontrol>
+			<stringcontrol name="availablelevel5label">
+				<anchored>
+					<to>availablelevel5</to>
+					<position>above</position>
+					<offset>0,-4</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<center />
+				<static>5</static>
+			</stringcontrol>
+			<stringcontrol name="availablelevel6label">
+				<anchored>
+					<to>availablelevel6</to>
+					<position>above</position>
+					<offset>0,-4</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<center />
+				<static>6</static>
+			</stringcontrol>
+			<stringcontrol name="availablelevel7label">
+				<anchored>
+					<to>availablelevel7</to>
+					<position>above</position>
+					<offset>0,-4</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<center />
+				<static>7</static>
+			</stringcontrol>
+			<stringcontrol name="availablelevel8label">
+				<anchored>
+					<to>availablelevel8</to>
+					<position>above</position>
+					<offset>0,-4</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<center />
+				<static>8</static>
+			</stringcontrol>
+			<stringcontrol name="availablelevel9label">
+				<anchored>
+					<to>availablelevel9</to>
+					<position>above</position>
+					<offset>0,-4</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<center />
+				<static>9</static>
+			</stringcontrol>
+
+			<checkbox name="spontaneous">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>5</offset>
+					</left>
+					<bottom>
+						<anchor>bottom</anchor>
+						<offset>-1</offset>
+					</bottom>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<stateicons>
+					<on>indicator_casterspontaneous</on>
+					<off>indicator_casterprep</off>
+				</stateicons>
+				<tooltip>
+					<text>Toggle spontaneous/prepared</text>
+				</tooltip>
+			</checkbox>
+
+			<stringcontrol name="label">
+				<anchored>
+					<left>
+						<parent>spontaneous</parent>
+						<anchor>right</anchor>
+						<offset>5</offset>
+					</left>
+					<right>
+						<parent>availablelevel9</parent>
+						<anchor>left</anchor>
+						<relation>relative</relation>
+					</right>
+					<top>
+						<parent>spontaneous</parent>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<font>sheetlabel</font>
+				<empty>&#171; Empty class &#187;</empty>
+				<static />
+				<script>
+					function onClickDown(button, x, y)
+						window.spelllevellist.setVisible(not window.spelllevellist.isVisible());
+					end
+				</script>
+			</stringcontrol>
+			
+			<windowlist name="spelllevellist">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>0</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>0</offset>
+					</right>
+					<top>
+						<parent>spontaneous</parent>
+						<anchor>bottom</anchor>
+						<offset>0</offset>
+					</top>
+				</anchored>
+				<datasource>.levels</datasource>
+				<class>charsheet_spelllistlevel</class>
+				<noscroll />
+				<script file="scripts/charsheet_spelllevellist.lua" />
+			</windowlist>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charsheet_spelllistlevel">
+		<sizelimits>
+			<minimum>
+				<height>11</height>
+			</minimum>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<sheetdata>
+			<stringcontrol name="label">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>9</offset>
+					</left>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<font>sheetlabelsmallbold</font>
+				<empty>&#171; Empty level &#187;</empty>
+				<static />
+				<script>
+					function onClickDown(button, x, y)
+						window.spelllist.setVisible(not window.spelllist.isVisible());
+					end
+					
+					function onInit()
+						setValue("Level " .. string.sub(window.getDatabaseNode().getName(), 6));
+						registerMenuItem("Create Item", "insert", 5);
+					end
+					
+					function onMenuSelection()
+						window.spelllist.createWindow();
+					end
+				</script>
+			</stringcontrol>
+			<stringcontrol name="stats">
+				<anchored>
+					<to>label</to>
+					<position>right</position>
+					<offset>5,0</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static />
+			</stringcontrol>
+			
+			<numberfield name="dc">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>3</offset>
+					</top>
+					<size>
+						<height>11</height>
+						<width>25</width>
+					</size>
+				</anchored>
+				<font>sheetnumbersmall</font>
+				<frame>
+					<name>textline</name>
+					<offset>0,5,0,0</offset>
+				</frame>
+			</numberfield>
+			<stringcontrol>
+				<anchored>
+					<to>dc</to>
+					<position>left</position>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Save DC</static>
+			</stringcontrol>
+			
+			<windowlist name="spelllist">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>0</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>0</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>14</offset>
+					</top>
+				</anchored>
+				<datasource>.spells</datasource>
+				<class>charsheet_spelllistitem</class>
+				<allowcreate />
+				<allowdelete />
+				<noscroll />
+				<script file="scripts/charsheet_spelllist.lua" />
+			</windowlist>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charsheet_spelllistitem">
+		<sizelimits>
+			<minimum>
+				<height>18</height>
+			</minimum>
+		</sizelimits>
+		<script file="scripts/charsheet_spelllistitem.lua" />
+		<sheetdata>
+			<stringfield name="name">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>15</offset>
+					</left>
+					<top>
+						<anchor>top</anchor>
+						<offset>5</offset>
+					</top>
+					<size>
+						<width>110</width>
+					</size>
+				</anchored>
+				<font>sheettextblock</font>
+				<frame>
+					<name>textline</name>
+					<offset>0,3,0,0</offset>
+				</frame>
+				<script>
+					function onClickDown(button, x, y)
+						return true;
+					end
+					
+					function onClickRelease(button, x, y)
+						setFocus();
+						setCursorPosition(getIndexAt(x, y));
+						setSelectionPosition(0);
+						return true;
+					end
+				
+					function onDrag(button, x, y, draginfo)
+						draginfo.setType("spelllistentry");
+						draginfo.setStringData(getValue());
+						draginfo.setCustomData(window);
+						return true;
+					end
+				</script>
+			</stringfield>
+			
+			<spellcounter name="counter">
+				<anchored>
+					<left>
+						<parent>name</parent>
+						<anchor>right</anchor>
+						<offset>3</offset>
+					</left>
+					<top>
+						<parent>name</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<bottom>
+						<parent>name</parent>
+						<anchor>bottom</anchor>
+						<offset>-1</offset>
+					</bottom>
+					<size>
+						<width>20</width>
+					</size>
+				</anchored>
+			</spellcounter>
+			
+			<windowreferencefield name="shortcut">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-2</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<icon>
+					<normal>button_openwindow</normal>
+					<empty>button_emptytarget</empty>
+					<pressed>button_emptytarget</pressed>
+				</icon>
+				<allowdrop />
+			</windowreferencefield>
+			
+			<stringfield name="shortdescription">
+				<anchored>
+					<left>
+						<parent>counter</parent>
+						<anchor>right</anchor>
+						<offset>10</offset>
+					</left>
+					<right>
+						<parent>shortcut</parent>
+						<anchor>left</anchor>
+						<offset>-3</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>5</offset>
+					</top>
+				</anchored>
+				<font>sheettextblock</font>
+				<frame>
+					<name>textline</name>
+					<offset>0,3,0,0</offset>
+				</frame>
+				<nodrag />
+			</stringfield>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charsheet_spells">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>
+			<genericcontrol name="spellframe">
+				<bounds>15,20,480,570</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<windowlist name="spellsetlist">
+				<anchored>
+					<to>spellframe</to>
+					<position>over</position>
+					<offset>-8,-8</offset>
+					<bottom>
+						<offset>-30</offset>
+					</bottom>
+				</anchored>
+				<datasource>.spellset</datasource>
+				<class>charsheet_spelllistset</class>
+				<footer>footer_wide</footer>
+				<script>
+					function onFilter(w)
+						if w.label.getValue() == "" then
+							return false;
+						end
+						
+						return true;
+					end
+
+					function onInit()
+						getDatabaseNode().createChild("set1");
+						getDatabaseNode().createChild("set2");
+						getDatabaseNode().createChild("set3");
+					end
+				</script>
+			</windowlist>
+			<scrollercontrol>
+				<anchored>
+					<to>spellsetlist</to>
+					<position>insidebottomright</position>
+					<offset>5,0</offset>
+					<size>
+						<width>45</width>
+						<height>27</height>
+					</size>
+				</anchored>
+				<target>spellsetlist</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+			
+			<checkbox name="castingmode">
+				<anchored>
+					<to>spellframe</to>
+					<position>insidebottomleft</position>
+					<offset>15,11</offset>
+					<size>
+						<width>15</width>
+						<height>15</height>
+					</size>
+				</anchored>
+				<stateicons>
+					<off>indicator_checkon</off>
+					<on>indicator_checkoff</on>
+				</stateicons>
+			</checkbox>
+			<stringcontrol>
+				<anchored>
+					<to>castingmode</to>
+					<position>right</position>
+					<offset>0,-1</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Preparation mode</static>
+				<script>
+					function onClickDown(button, x, y)
+						return window.castingmode.onClickDown(button, x, y);
+					end
+				</script>
+			</stringcontrol>
+			
+			<windowreferencecontrol>
+				<anchored>
+					<to>spellframe</to>
+					<position>insidebottomright</position>
+					<offset>18,11</offset>
+					<size>
+						<width>40</width>
+						<height>15</height>
+					</size>
+				</anchored>
+				<icon>
+					<normal>button_minisheet</normal>
+					<pressed>button_minisheet_down</pressed>
+				</icon>
+				<class>charsheetmini_spells</class>
+				<tooltip>
+					<text>Spell minisheet</text>
+				</tooltip>
+				<nodrag />
+				<closetoggle />
+			</windowreferencecontrol>
+		</sheetdata>
+	</windowclass>
+</root>

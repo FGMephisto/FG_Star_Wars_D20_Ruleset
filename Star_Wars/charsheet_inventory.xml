@@ -1,0 +1,1133 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<root version="2.0">
+	<windowclass name="charsheet_inventoryitem">
+		<sizelimits>
+			<minimum>
+				<height>10</height>
+			</minimum>
+		</sizelimits>
+		<sheetdata>
+			<numberfield name="count">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>2</offset>
+					</left>
+					<top>
+						<anchor>top</anchor>
+						<offset>2</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>14</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>textlinesmall</name>
+					<offset>0,0,0,0</offset>
+				</frame>
+				<keyeditframe>
+					<name>sheetfocus</name>
+					<offset>6,5,6,5</offset>
+				</keyeditframe>
+				<font>sheetnumbersmall</font>
+				<hideonvalue>0</hideonvalue>
+				<noreset />
+				<nodrag />
+				<delaykeyupdate />
+				<script>
+					function onValueChanged()
+						window.windowlist.updateEncumbrance();
+					end
+				</script>
+				<tabtarget>
+					<next>name</next>
+					<prev>weight</prev>
+				</tabtarget>
+			</numberfield>
+			<textlistitemvalue name="name">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>25</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-190</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+				</anchored>
+				<tabtarget>
+					<next>location</next>
+					<prev>count</prev>
+				</tabtarget>
+				<script>
+					function onLoseFocus()
+						super.onLoseFocus();
+						window.windowlist.applySort();
+					end
+				</script>
+			</textlistitemvalue>
+			<textlistitemvalue name="location">
+				<anchored>
+					<left>
+						<parent>name</parent>
+						<anchor>right</anchor>
+						<offset>5</offset>
+					</left>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<size>
+						<width>100</width>
+					</size>
+				</anchored>
+				<nodelete />
+				<script file="scripts/charsheet_inventorylocation.lua" />
+				<tabtarget>
+					<next>weight</next>
+					<prev>name</prev>
+				</tabtarget>
+			</textlistitemvalue>
+			<numberfield name="weight">
+				<anchored>
+					<left>
+						<parent>location</parent>
+						<anchor>right</anchor>
+						<offset>7</offset>
+					</left>
+					<top>
+						<anchor>top</anchor>
+						<offset>2</offset>
+					</top>
+					<size>
+						<width>30</width>
+						<height>14</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>modifier</name>
+					<offset>6,5,6,5</offset>
+				</frame>
+				<keyeditframe>
+					<name>sheetfocus</name>
+					<offset>6,5,6,5</offset>
+				</keyeditframe>
+				<font>sheetnumbersmall</font>
+				<hideonvalue>0</hideonvalue>
+				<noreset />
+				<nodrag />
+				<delaykeyupdate />
+				<script>
+					function onValueChanged()
+						window.windowlist.updateEncumbrance();
+					end
+				</script>
+				<tabtarget>
+					<next>count</next>
+					<prev>location</prev>
+				</tabtarget>
+			</numberfield>
+			<checkbox name="carried">
+				<anchored>
+					<left>
+						<parent>weight</parent>
+						<anchor>right</anchor>
+						<offset>10</offset>
+					</left>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<script>
+					function onValueChanged()
+						if window.name.getValue() ~= "" then
+							for k, v in ipairs(window.windowlist.getWindows()) do
+								if v.location.getValue() == window.name.getValue() then
+									v.carried.setState(getState());
+								end
+							end
+						end
+					
+						window.windowlist.updateEncumbrance();
+					end
+				</script>
+			</checkbox>
+			<checkbox name="showonminisheet">
+				<anchored>
+					<left>
+						<parent>carried</parent>
+						<anchor>right</anchor>
+						<offset>7</offset>
+					</left>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+			</checkbox>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charsheet_inventory">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<nodelete />
+		<sheetdata>
+			<!-- Inventory -->
+			<genericcontrol name="inventoryframe">
+				<bounds>15,20,480,370</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<stringcontrol>
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetop</position>
+					<offset>0,11</offset>
+				</anchored>
+				<center />
+				<font>sheetlabel</font>
+				<static>Inventory</static>
+			</stringcontrol>
+			
+			<stringcontrol>
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>21,17</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>#</static>
+			</stringcontrol>
+			<stringcontrol>
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>38,17</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>
+			</stringcontrol>
+			<stringcontrol>
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>313,17</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Location</static>
+			</stringcontrol>
+			<stringcontrol>
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>388,17</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Weight</static>
+			</stringcontrol>
+			<genericcontrol>
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>431,17</offset>
+					<size>
+						<width>10</width>
+						<height>10</height>
+					</size>
+				</anchored>
+				<icon>indicator_encumbrance</icon>
+				<tooltip>
+					<text>Apply weight to encumbrance</text>
+				</tooltip>
+			</genericcontrol>
+			<genericcontrol>
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>450,17</offset>
+					<size>
+						<width>10</width>
+						<height>10</height>
+					</size>
+				</anchored>
+				<icon>indicator_quicklist</icon>
+				<tooltip>
+					<text>Show on mini sheet</text>
+				</tooltip>
+			</genericcontrol>
+			
+			<windowlist name="inventorylist">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>over</position>
+					<offset>-12,-9</offset>
+					<top>
+						<parent>inventoryframe</parent>
+						<offset>30</offset>
+					</top>
+				</anchored>
+				<datasource>.inventorylist</datasource>
+				<class>charsheet_inventoryitem</class>
+				<allowcreate />
+				<allowdelete />
+				<script file="scripts/charsheet_inventorylist.lua" />
+			</windowlist>
+			<scrollercontrol>
+				<anchored>
+					<to>inventorylist</to>
+					<position>insidebottomright</position>
+					<size>
+						<width>45</width>
+						<height>27</height>
+					</size>
+				</anchored>
+				<target>inventorylist</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+			<windowreferencecontrol>
+				<anchored>
+					<to>inventorylist</to>
+					<position>insidebottomleft</position>
+					<offset>2,4</offset>
+					<size>
+						<width>40</width>
+						<height>15</height>
+					</size>
+				</anchored>
+				<icon>
+					<normal>button_minisheet</normal>
+					<pressed>button_minisheet_down</pressed>
+				</icon>
+				<class>charsheetmini_inventory</class>
+				<tooltip>
+					<text>Inventory minisheet</text>
+				</tooltip>
+				<nodrag />
+				<closetoggle />
+			</windowreferencecontrol>
+
+			<!-- Armor check penalty -->
+			<genericcontrol name="acpenaltyframe">
+				<bounds>15,390,240,58</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<numberfield name="armormaxdexbonus" source="encumbrance.armormaxdexbonus">
+				<anchored>
+					<to>acpenaltyframe</to>
+					<position>insidetopleft</position>
+					<offset>90,24</offset>
+					<size>
+						<width>55</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>bonus</name>
+					<offset>5,5,5,5</offset>
+				</frame>
+				<keyeditframe>
+					<name>sheetfocus</name>
+					<offset>5,5,5,5</offset>
+				</keyeditframe>
+				<font>sheetnumber</font>
+				<tabtarget>
+					<next>encumbrancelightload</next>
+					<prev>armorcheckpenalty</prev>
+				</tabtarget>
+				<script>
+					function update()
+						if source.getValue() == 0 then
+							setColor("7f000000");
+						else
+							setColor("ff000000");
+						end
+					end
+				
+					function onInit()
+						source = window.getDatabaseNode().createChild("encumbrance.armormaxdexbonusactive", "number");
+						source.onUpdate = update;
+						update();
+					end
+				</script>
+			</numberfield>
+			<stringcontrol name="armormaxdexbonuslabel">
+				<anchored>
+					<to>armormaxdexbonus</to>
+					<position>above</position>
+					<offset>10,2</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<center />
+				<static>Max dex bonus</static>
+			</stringcontrol>
+			<checkbox name="usearmormaxdexbonus">
+				<anchored>
+					<to>armormaxdexbonuslabel</to>
+					<position>left</position>
+					<offset>-31,0</offset>
+				</anchored>
+				<sourcename>encumbrance.armormaxdexbonusactive</sourcename>
+			</checkbox>
+			
+			<numberfield name="armorcheckpenalty" source="encumbrance.armorcheckpenalty">
+				<anchored>
+					<to>armormaxdexbonus</to>
+					<position>right</position>
+					<offset>15,0</offset>
+					<size>
+						<width>55</width>
+					</size>
+				</anchored>
+				<frame>
+					<name>bonus</name>
+					<offset>5,5,5,5</offset>
+				</frame>
+				<keyeditframe>
+					<name>sheetfocus</name>
+					<offset>5,5,5,5</offset>
+				</keyeditframe>
+				<font>sheetnumber</font>
+				<tabtarget>
+					<next>armormaxdexbonus</next>
+					<prev>coinother</prev>
+				</tabtarget>
+			</numberfield>
+			<stringcontrol>
+				<anchored>
+					<to>armorcheckpenalty</to>
+					<position>above</position>
+					<offset>10,2</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<center />
+				<static>Check penalty</static>
+			</stringcontrol>
+
+			<stringcontrol>
+				<anchored>
+					<to>armormaxdexbonus</to>
+					<position>insidetopleft</position>
+					<offset>-70,2</offset>
+				</anchored>
+				<font>sheetlabel</font>
+				<static>Armor</static>
+			</stringcontrol>
+
+			<!-- Encumbrance -->
+			<genericcontrol name="encumbranceframe">
+				<bounds>15,448,240,142</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<numberfield name="encumbranceload" source="encumbrance.load">
+				<anchored>
+					<to>encumbranceframe</to>
+					<position>insidetopleft</position>
+					<offset>160,17</offset>
+					<size>
+						<width>55</width>
+						<height>22</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>bonus</name>
+					<offset>5,5,5,5</offset>
+				</frame>
+				<font>sheetnumber</font>
+				<readonly />
+			</numberfield>
+			<stringcontrol>
+				<anchored>
+					<to>encumbranceload</to>
+					<position>insidetopleft</position>
+					<offset>-140,4</offset>
+				</anchored>
+				<font>sheetlabel</font>
+				<static>Total encumbrance</static>
+			</stringcontrol>
+			
+			<numberfield name="encumbrancelightload" source="encumbrance.lightload">
+				<anchored>
+					<to>encumbranceframe</to>
+					<position>insidetopleft</position>
+					<offset>20,61</offset>
+					<size>
+						<width>55</width>
+						<height>22</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>bonus</name>
+					<offset>5,5,5,5</offset>
+				</frame>
+				<keyeditframe>
+					<name>sheetfocus</name>
+					<offset>5,5,5,5</offset>
+				</keyeditframe>
+				<font>sheetnumber</font>
+				<tabtarget>
+					<next>encumbrancemediumload</next>
+					<prev>armormaxdexbonus</prev>
+				</tabtarget>
+			</numberfield>
+			<stringcontrol>
+				<anchored>
+					<to>encumbrancelightload</to>
+					<position>above</position>
+					<offset>10,2</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<center />
+				<static>Light load</static>
+			</stringcontrol>
+
+			<numberfield name="encumbrancemediumload" source="encumbrance.mediumload">
+				<anchored>
+					<to>encumbrancelightload</to>
+					<position>right</position>
+					<offset>15,0</offset>
+					<size>
+						<width>55</width>
+					</size>
+				</anchored>
+				<frame>
+					<name>bonus</name>
+					<offset>5,5,5,5</offset>
+				</frame>
+				<keyeditframe>
+					<name>sheetfocus</name>
+					<offset>5,5,5,5</offset>
+				</keyeditframe>
+				<font>sheetnumber</font>
+				<tabtarget>
+					<next>encumbranceheavyload</next>
+					<prev>encumbrancelightload</prev>
+				</tabtarget>
+			</numberfield>
+			<stringcontrol>
+				<anchored>
+					<to>encumbrancemediumload</to>
+					<position>above</position>
+					<offset>10,2</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<center />
+				<static>Medium load</static>
+			</stringcontrol>
+
+			<numberfield name="encumbranceheavyload" source="encumbrance.heavyload">
+				<anchored>
+					<to>encumbrancemediumload</to>
+					<position>right</position>
+					<offset>15,0</offset>
+					<size>
+						<width>55</width>
+					</size>
+				</anchored>
+				<frame>
+					<name>bonus</name>
+					<offset>5,5,5,5</offset>
+				</frame>
+				<keyeditframe>
+					<name>sheetfocus</name>
+					<offset>5,5,5,5</offset>
+				</keyeditframe>
+				<font>sheetnumber</font>
+				<tabtarget>
+					<next>encumbranceliftoverhead</next>
+					<prev>encumbrancemediumload</prev>
+				</tabtarget>
+			</numberfield>
+			<stringcontrol>
+				<anchored>
+					<to>encumbranceheavyload</to>
+					<position>above</position>
+					<offset>10,2</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<center />
+				<static>Heavy load</static>
+			</stringcontrol>
+
+			<numberfield name="encumbranceliftoverhead" source="encumbrance.liftoverhead">
+				<anchored>
+					<to>encumbrancelightload</to>
+					<position>below</position>
+					<offset>0,18</offset>
+					<size>
+						<height>22</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>bonus</name>
+					<offset>5,5,5,5</offset>
+				</frame>
+				<keyeditframe>
+					<name>sheetfocus</name>
+					<offset>5,5,5,5</offset>
+				</keyeditframe>
+				<font>sheetnumber</font>
+				<tabtarget>
+					<next>encumbranceliftoffground</next>
+					<prev>encumbranceheavyload</prev>
+				</tabtarget>
+			</numberfield>
+			<stringcontrol>
+				<anchored>
+					<to>encumbranceliftoverhead</to>
+					<position>above</position>
+					<offset>10,2</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<center />
+				<static>Lift over head</static>
+			</stringcontrol>
+
+			<numberfield name="encumbranceliftoffground" source="encumbrance.liftoffground">
+				<anchored>
+					<to>encumbranceliftoverhead</to>
+					<position>right</position>
+					<offset>15,0</offset>
+					<size>
+						<width>55</width>
+					</size>
+				</anchored>
+				<frame>
+					<name>bonus</name>
+					<offset>5,5,5,5</offset>
+				</frame>
+				<keyeditframe>
+					<name>sheetfocus</name>
+					<offset>5,5,5,5</offset>
+				</keyeditframe>
+				<font>sheetnumber</font>
+				<tabtarget>
+					<next>encumbrancepushordrag</next>
+					<prev>encumbranceliftoverhead</prev>
+				</tabtarget>
+			</numberfield>
+			<stringcontrol>
+				<anchored>
+					<to>encumbranceliftoffground</to>
+					<position>above</position>
+					<offset>10,2</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<center />
+				<static>Lift off ground</static>
+			</stringcontrol>
+
+			<numberfield name="encumbrancepushordrag" source="encumbrance.pushordrag">
+				<anchored>
+					<to>encumbranceliftoffground</to>
+					<position>right</position>
+					<offset>15,0</offset>
+					<size>
+						<width>55</width>
+					</size>
+				</anchored>
+				<frame>
+					<name>bonus</name>
+					<offset>5,5,5,5</offset>
+				</frame>
+				<keyeditframe>
+					<name>sheetfocus</name>
+					<offset>5,5,5,5</offset>
+				</keyeditframe>
+				<font>sheetnumber</font>
+				<tabtarget>
+					<next>coinamount1</next>
+					<prev>encumbranceliftoffground</prev>
+				</tabtarget>
+			</numberfield>
+			<stringcontrol>
+				<anchored>
+					<to>encumbrancepushordrag</to>
+					<position>above</position>
+					<offset>10,2</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<center />
+				<static>Push or drag</static>
+			</stringcontrol>
+
+			<!-- Coins -->
+			<genericcontrol name="coinframe">
+				<bounds>255,390,240,200</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<stringcontrol>
+				<anchored>
+					<to>coinframe</to>
+					<position>insidetopleft</position>
+					<offset>15,12</offset>
+				</anchored>
+				<font>sheetlabel</font>
+				<static>Coins</static>
+			</stringcontrol>
+			<windowreferencecontrol>
+				<anchored>
+					<to>coinframe</to>
+					<position>insidetopleft</position>
+					<offset>91,12</offset>
+					<size>
+						<width>40</width>
+						<height>15</height>
+					</size>
+				</anchored>
+				<icon>
+					<normal>button_minisheet</normal>
+					<pressed>button_minisheet_down</pressed>
+				</icon>
+				<class>charsheetmini_coins</class>
+				<tooltip>
+					<text>Coin minisheet</text>
+				</tooltip>
+				<nodrag />
+				<closetoggle />
+			</windowreferencecontrol>
+
+			<stringfield name="coinname1" source="coins.slot1.name">
+				<anchored>
+					<to>coinframe</to>
+					<position>insidetopleft</position>
+					<offset>64,33</offset>
+					<size>
+						<width>65</width>
+						<height>18</height>
+					</size>
+				</anchored>
+				<font>sheettextsmall</font>
+				<frame>
+					<name>textline</name>
+					<offset>1,1,0,0</offset>
+				</frame>
+				<tabtarget>
+					<next>coinamount2</next>
+					<prev>coinamount1</prev>
+				</tabtarget>
+			</stringfield>
+			<numberfield name="coinamount1" source="coins.slot1.amount">
+				<anchored>
+					<to>coinframe</to>
+					<position>insidetopleft</position>
+					<offset>15,33</offset>
+					<size>
+						<width>45</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>modifier</name>
+					<offset>5,5,5,6</offset>
+				</frame>
+				<keyeditframe>
+					<name>sheetfocus</name>
+					<offset>5,5,5,6</offset>
+				</keyeditframe>
+				<font>sheetnumbersmall</font>
+				<noreset />
+				<stateframe>
+					<drophilight>
+						<name>sheetfocusplus</name>
+						<offset>5,5,5,5</offset>
+					</drophilight>
+				</stateframe>
+				<droptypes>
+					<type>number</type>
+				</droptypes>
+				<script>
+					function onDrop(x, y, draginfo)
+						if draginfo.isType("number") then
+							setValue(getValue() + draginfo.getNumberData());
+							return true;
+						end
+					end
+				</script>
+				<tabtarget>
+					<next>coinname1</next>
+					<prev>encumbrancepushordrag</prev>
+				</tabtarget>
+			</numberfield>
+
+			<stringfield name="coinname2" source="coins.slot2.name">
+				<anchored>
+					<to>coinname1</to>
+					<position>below</position>
+					<offset>0,7</offset>
+					<size>
+						<height>18</height>
+					</size>
+				</anchored>
+				<font>sheettextsmall</font>
+				<frame>
+					<name>textline</name>
+					<offset>1,1,0,0</offset>
+				</frame>
+				<tabtarget>
+					<next>coinamount3</next>
+					<prev>coinamount2</prev>
+				</tabtarget>
+			</stringfield>
+			<numberfield name="coinamount2" source="coins.slot2.amount">
+				<anchored>
+					<to>coinamount1</to>
+					<position>below</position>
+					<offset>0,8</offset>
+					<size>
+						<height>16</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>modifier</name>
+					<offset>5,5,5,6</offset>
+				</frame>
+				<keyeditframe>
+					<name>sheetfocus</name>
+					<offset>5,5,5,6</offset>
+				</keyeditframe>
+				<font>sheetnumbersmall</font>
+				<noreset />
+				<stateframe>
+					<drophilight>
+						<name>sheetfocusplus</name>
+						<offset>5,5,5,5</offset>
+					</drophilight>
+				</stateframe>
+				<droptypes>
+					<type>number</type>
+				</droptypes>
+				<script>
+					function onDrop(x, y, draginfo)
+						if draginfo.isType("number") then
+							setValue(getValue() + draginfo.getNumberData());
+							return true;
+						end
+					end
+				</script>
+				<tabtarget>
+					<next>coinname2</next>
+					<prev>coinname1</prev>
+				</tabtarget>
+			</numberfield>
+
+			<stringfield name="coinname3" source="coins.slot3.name">
+				<anchored>
+					<to>coinname2</to>
+					<position>below</position>
+					<offset>0,7</offset>
+					<size>
+						<height>18</height>
+					</size>
+				</anchored>
+				<font>sheettextsmall</font>
+				<frame>
+					<name>textline</name>
+					<offset>1,1,0,0</offset>
+				</frame>
+				<tabtarget>
+					<next>coinamount4</next>
+					<prev>coinamount3</prev>
+				</tabtarget>
+			</stringfield>
+			<numberfield name="coinamount3" source="coins.slot3.amount">
+				<anchored>
+					<to>coinamount2</to>
+					<position>below</position>
+					<offset>0,8</offset>
+					<size>
+						<height>16</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>modifier</name>
+					<offset>5,5,5,6</offset>
+				</frame>
+				<keyeditframe>
+					<name>sheetfocus</name>
+					<offset>5,5,5,6</offset>
+				</keyeditframe>
+				<font>sheetnumbersmall</font>
+				<noreset />
+				<stateframe>
+					<drophilight>
+						<name>sheetfocusplus</name>
+						<offset>5,5,5,5</offset>
+					</drophilight>
+				</stateframe>
+				<droptypes>
+					<type>number</type>
+				</droptypes>
+				<script>
+					function onDrop(x, y, draginfo)
+						if draginfo.isType("number") then
+							setValue(getValue() + draginfo.getNumberData());
+							return true;
+						end
+					end
+				</script>
+				<tabtarget>
+					<next>coinname3</next>
+					<prev>coinname2</prev>
+				</tabtarget>
+			</numberfield>
+
+			<stringfield name="coinname4" source="coins.slot4.name">
+				<anchored>
+					<to>coinname3</to>
+					<position>below</position>
+					<offset>0,7</offset>
+					<size>
+						<height>18</height>
+					</size>
+				</anchored>
+				<font>sheettextsmall</font>
+				<frame>
+					<name>textline</name>
+					<offset>1,1,0,0</offset>
+				</frame>
+				<tabtarget>
+					<next>coinamount5</next>
+					<prev>coinamount4</prev>
+				</tabtarget>
+			</stringfield>
+			<numberfield name="coinamount4" source="coins.slot4.amount">
+				<anchored>
+					<to>coinamount3</to>
+					<position>below</position>
+					<offset>0,8</offset>
+					<size>
+						<height>16</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>modifier</name>
+					<offset>5,5,5,6</offset>
+				</frame>
+				<keyeditframe>
+					<name>sheetfocus</name>
+					<offset>5,5,5,6</offset>
+				</keyeditframe>
+				<font>sheetnumbersmall</font>
+				<noreset />
+				<stateframe>
+					<drophilight>
+						<name>sheetfocusplus</name>
+						<offset>5,5,5,5</offset>
+					</drophilight>
+				</stateframe>
+				<droptypes>
+					<type>number</type>
+				</droptypes>
+				<script>
+					function onDrop(x, y, draginfo)
+						if draginfo.isType("number") then
+							setValue(getValue() + draginfo.getNumberData());
+							return true;
+						end
+					end
+				</script>
+				<tabtarget>
+					<next>coinname4</next>
+					<prev>coinname3</prev>
+				</tabtarget>
+			</numberfield>
+
+			<stringfield name="coinname5" source="coins.slot5.name">
+				<anchored>
+					<to>coinname4</to>
+					<position>below</position>
+					<offset>0,7</offset>
+					<size>
+						<height>18</height>
+					</size>
+				</anchored>
+				<font>sheettextsmall</font>
+				<frame>
+					<name>textline</name>
+					<offset>1,1,0,0</offset>
+				</frame>
+				<tabtarget>
+					<next>coinamount6</next>
+					<prev>coinamount5</prev>
+				</tabtarget>
+			</stringfield>
+			<numberfield name="coinamount5" source="coins.slot5.amount">
+				<anchored>
+					<to>coinamount4</to>
+					<position>below</position>
+					<offset>0,8</offset>
+					<size>
+						<height>16</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>modifier</name>
+					<offset>5,5,5,6</offset>
+				</frame>
+				<keyeditframe>
+					<name>sheetfocus</name>
+					<offset>5,5,5,6</offset>
+				</keyeditframe>
+				<font>sheetnumbersmall</font>
+				<noreset />
+				<stateframe>
+					<drophilight>
+						<name>sheetfocusplus</name>
+						<offset>5,5,5,5</offset>
+					</drophilight>
+				</stateframe>
+				<droptypes>
+					<type>number</type>
+				</droptypes>
+				<script>
+					function onDrop(x, y, draginfo)
+						if draginfo.isType("number") then
+							setValue(getValue() + draginfo.getNumberData());
+							return true;
+						end
+					end
+				</script>
+				<tabtarget>
+					<next>coinname5</next>
+					<prev>coinname4</prev>
+				</tabtarget>
+			</numberfield>
+
+			<stringfield name="coinname6" source="coins.slot6.name">
+				<anchored>
+					<to>coinname5</to>
+					<position>below</position>
+					<offset>0,7</offset>
+					<size>
+						<height>18</height>
+					</size>
+				</anchored>
+				<font>sheettextsmall</font>
+				<frame>
+					<name>textline</name>
+					<offset>1,1,0,0</offset>
+				</frame>
+				<tabtarget>
+					<next>coinother</next>
+					<prev>coinamount6</prev>
+				</tabtarget>
+			</stringfield>
+			<numberfield name="coinamount6" source="coins.slot6.amount">
+				<anchored>
+					<to>coinamount5</to>
+					<position>below</position>
+					<offset>0,8</offset>
+					<size>
+						<height>16</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>modifier</name>
+					<offset>5,5,5,6</offset>
+				</frame>
+				<keyeditframe>
+					<name>sheetfocus</name>
+					<offset>5,5,5,6</offset>
+				</keyeditframe>
+				<font>sheetnumbersmall</font>
+				<noreset />
+				<stateframe>
+					<drophilight>
+						<name>sheetfocusplus</name>
+						<offset>5,5,5,5</offset>
+					</drophilight>
+				</stateframe>
+				<droptypes>
+					<type>number</type>
+				</droptypes>
+				<script>
+					function onDrop(x, y, draginfo)
+						if draginfo.isType("number") then
+							setValue(getValue() + draginfo.getNumberData());
+							return true;
+						end
+					end
+				</script>
+				<tabtarget>
+					<next>coinname6</next>
+					<prev>coinname5</prev>
+				</tabtarget>
+			</numberfield>
+			
+			<stringfield name="coinother">
+				<anchored>
+					<left>
+						<parent>coinname1</parent>
+						<anchor>right</anchor>
+						<offset>10</offset>
+					</left>
+					<right>
+						<parent>coinframe</parent>
+						<anchor>right</anchor>
+						<offset>-15</offset>
+					</right>
+					<top>
+						<parent>coinamount1</parent>
+						<anchor>top</anchor>
+						<offset>-5</offset>
+					</top>
+					<bottom>
+						<parent>coinamount6</parent>
+						<anchor>bottom</anchor>
+						<offset>5</offset>
+					</bottom>
+				</anchored>
+				<font>sheettextsmall</font>
+				<multilinespacing>15</multilinespacing>
+				<frame>
+					<name>modifier</name>
+					<offset>6,5,6,5</offset>
+				</frame>
+				<tabtarget>
+					<next>armorcheckpenalty</next>
+					<prev>coinname6</prev>
+				</tabtarget>
+			</stringfield>
+			<stringcontrol>
+				<anchored>
+					<to>coinother</to>
+					<position>aboveleft</position>
+					<offset>0,2</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Other</static>
+			</stringcontrol>
+		</sheetdata>
+	</windowclass>
+</root>

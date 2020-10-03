@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<root version="2.0">
+	<includefile source="adventure_story.xml" />
+	<includefile source="adventure_images.xml" />
+	<includefile source="adventure_npcs.xml" />
+	<includefile source="adventure_items.xml" />
+</root>

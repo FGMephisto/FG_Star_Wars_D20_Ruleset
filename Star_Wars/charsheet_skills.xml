@@ -1,0 +1,738 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<root version="2.0">
+	<windowclass name="charsheet_skilllistitem">
+		<sizelimits>
+			<minimum>
+				<height>18</height>
+			</minimum>
+		</sizelimits>
+		<script file="scripts/charsheet_skilllistitem.lua" />
+		<sheetdata>
+			<stringfield name="label">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>15</offset>
+					</left>
+					<top>
+						<anchor>top</anchor>
+						<offset>5</offset>
+					</top>
+					<size>
+						<width>90</width>
+					</size>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<frame>
+					<name>textline</name>
+					<offset>0,5,0,0</offset>
+				</frame>
+			</stringfield>
+			<stringfield name="sublabel">
+				<anchored>
+					<left>
+						<parent>label</parent>
+						<anchor>left</anchor>
+						<offset>2</offset>
+					</left>
+					<right>
+						<parent>label</parent>
+						<anchor>left</anchor>
+						<offset>90</offset>
+					</right>
+					<top>
+						<parent>label</parent>
+						<anchor>bottom</anchor>
+						<offset>1</offset>
+					</top>
+					<size>
+						<height>11</height>
+					</size>
+				</anchored>
+				<invisible />
+				<font>sheetlabelsmall</font>
+				<frame>
+					<name>textline</name>
+					<offset>0,5,0,0</offset>
+				</frame>
+				<script>
+					function onEnter()
+						window.windowlist.addNewInstance(window.label.getValue());
+					end
+					
+					function onDeleteUp()
+						if getValue() == "" and window.ranks.getValue() == 0 then
+							local target = window.windowlist.getPrevWindow(window);
+							if target and target.label.getValue() == window.label.getValue() then
+								target.sublabel.setFocus();
+							end
+							
+							window.getDatabaseNode().delete();
+						end
+					end
+				</script>
+			</stringfield>
+
+			<genericcontrol name="state">
+				<anchored>
+					<to>label</to>
+					<position>insidetopleft</position>
+					<offset>-13,0</offset>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<icon>indicator_checkoff</icon>
+				<script file="scripts/charsheet_skillstate.lua" />
+			</genericcontrol>
+			<stringcontrol name="statlabel">
+				<anchored>
+					<to>label</to>
+					<position>insidetopleft</position>
+					<offset>92,0</offset>
+					<size>
+						<width>20</width>
+					</size>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<stateframe>
+					<hover>
+						<name>sheetfocus</name>
+						<offset>6,7,7,5</offset>
+					</hover>
+				</stateframe>
+				<static />
+				<center />
+				<script>
+					function setStat(value)
+						if value and value ~= "" then
+							setValue(string.upper(string.sub(value, 1, 1)) .. string.sub(value, 2, 3));
+						else
+							setValue("-");
+						end
+					end
+					
+					function onClickDown(button, x, y)
+						if window.iscustom then
+							window.stat.cycleStat();
+						end
+					end
+					
+					function onInit()
+						setStat(nil);
+					end
+				</script>
+			</stringcontrol>
+			<numbercontrol name="ranks">
+				<anchored>
+					<to>label</to>
+					<position>insidetopleft</position>
+					<offset>115,-3</offset>
+					<size>
+						<width>21</width>
+						<height>14</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>textlinesmall</name>
+					<offset>0,0,0,0</offset>
+				</frame>
+				<keyeditframe>
+					<name>rowshade</name>
+					<offset>1,1,1,1</offset>
+				</keyeditframe>
+				<stateframe>
+					<drophilight>
+						<name>rowshade</name>
+						<offset>1,1,1,1</offset>
+					</drophilight>
+				</stateframe>
+				<droptypes>
+					<type>number</type>
+				</droptypes>
+				<font>sheetnumbersmall</font>
+				<hideonvalue>0</hideonvalue>
+				<noreset />
+				<nodrag />
+				<delaykeyupdate />
+				<script file="scripts/charsheet_skillranks.lua" />
+			</numbercontrol>
+			<numbercontrol name="stat">
+				<anchored>
+					<to>label</to>
+					<position>insidetopleft</position>
+					<offset>139,-3</offset>
+					<size>
+						<width>21</width>
+						<height>14</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>textlinesmall</name>
+					<offset>0,0,0,0</offset>
+				</frame>
+				<displaysign />
+				<hideonvalue>0</hideonvalue>
+				<font>sheetnumbersmall</font>
+				<disabled />
+				<script>
+					function statUpdate()
+						if statnode then
+							setValue(statnode.getValue());
+						else
+							setValue(0);
+						end
+						
+						window.total.update();
+					end
+					
+					function statNameUpdate()
+						updateNode(statnamenode.getValue());
+					end
+					
+					function nothing() end;
+				
+					function updateNode(statname)
+						if statnode then
+							statnode.onUpdate = nothing;
+							statnode = nil;
+						end
+						
+						window.statlabel.setStat(statname);
+
+						if statname and statname ~= "" then
+							statnode = window.windowlist.window.getDatabaseNode().createChild("abilities." .. statname .. ".bonus", "number");
+							if statnode then
+								statnode.onUpdate = statUpdate;
+							end
+						end
+						
+						statUpdate();
+					end
+					
+					function setStat(statname)
+						statnamenode.setValue(statname);
+					end
+					
+					function cycleStat()
+						if statnamenode then
+							local cyclemap = { [""] = "strength", 
+											   ["strength"] = "dexterity", ["dexterity"] = "constitution", ["constitution"] = "intelligence", 
+											   ["intelligence"] = "wisdom", ["wisdom"] = "charisma", ["charisma"] = "" };
+							local statnow = statnamenode.getValue() or "";
+							
+							setStat(cyclemap[statnow]);
+						end
+					end
+				
+					function onInit()
+						statnamenode = window.getDatabaseNode().createChild("statname", "string");
+						
+						if statnamenode then
+							statnamenode.onUpdate = statNameUpdate;
+							statNameUpdate();
+						end
+					end
+				</script>
+			</numbercontrol>
+			<numberfield name="misc">
+				<anchored>
+					<to>label</to>
+					<position>insidetopleft</position>
+					<offset>163,-3</offset>
+					<size>
+						<width>21</width>
+						<height>14</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>textlinesmall</name>
+					<offset>0,0,0,0</offset>
+				</frame>
+				<keyeditframe>
+					<name>rowshade</name>
+					<offset>1,1,1,1</offset>
+				</keyeditframe>
+				<stateframe>
+					<drophilight>
+						<name>rowshade</name>
+						<offset>1,1,1,1</offset>
+					</drophilight>
+				</stateframe>
+				<droptypes>
+					<type>number</type>
+				</droptypes>
+				<font>sheetnumbersmall</font>
+				<hideonvalue>0</hideonvalue>
+				<noreset />
+				<nodrag />
+				<displaysign />
+			</numberfield>
+			<numberfield name="total">
+				<anchored>
+					<to>label</to>
+					<position>insidetopleft</position>
+					<offset>184,-3</offset>
+					<size>
+						<width>27</width>
+						<height>14</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>modifier</name>
+					<offset>2,5,5,5</offset>
+				</frame>
+				<font>sheetnumbersmall</font>
+				<readonly />
+				<displaysign />
+				<hideonvalue>0</hideonvalue>
+				<script>
+					function update(source)
+						if ranknode then
+							setValue(ranknode.getValue() + math.floor(0.5*halfranknode.getValue()) + miscnode.getValue() + window.stat.getValue() + armorchecknode.getValue() * armorcheckmodifiernode.getValue());
+							
+							if armorchecknode.getValue() ~= 0 then
+								armorwidget.setVisible(true);
+							else
+								armorwidget.setVisible(false);
+							end
+						end
+					end
+				
+					function onInit()
+						armorwidget = addBitmapWidget("indicator_armorcheck");
+						armorwidget.setPosition("center", -110, 1);
+					
+						ranknode = window.getDatabaseNode().createChild("ranks", "number");
+						halfranknode = window.getDatabaseNode().createChild("halfranks", "number");
+						miscnode = window.getDatabaseNode().createChild("misc", "number");
+						
+						ranknode.onUpdate = update;
+						halfranknode.onUpdate = update;
+						miscnode.onUpdate = update;
+
+						armorchecknode = window.getDatabaseNode().createChild("armorcheckmultiplier", "number");
+						armorcheckmodifiernode = window.windowlist.window.getDatabaseNode().createChild("encumbrance.armorcheckpenalty", "number");
+						armorchecknode.onUpdate = update;
+						armorcheckmodifiernode.onUpdate = update;
+						
+						update();
+					end
+					
+					function onDrag(button, x, y, draginfo)
+						local label = window.getDatabaseNode().getChild("label").getValue();
+						local sublabel = window.getDatabaseNode().getChild("sublabel").getValue();
+						
+						local desc = label;
+						if not sublabel or sublabel ~= "" then
+							desc = label .. " (" .. sublabel .. ")";
+						end
+						
+						draginfo.setType("number");
+						draginfo.setDescription(desc);
+						draginfo.setNumberData(getValue());
+						
+						return true;
+					end
+				</script>
+			</numberfield>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charsheet_skills">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<nodelete />
+		<script>
+			skillcounter = 0;
+			
+			function getCounter()
+				return skillcounter;
+			end
+			
+			function incrementCounter()
+				skillcounter = skillcounter + 1;
+			end
+			
+			function onInit()
+			end
+		</script>
+		<sheetdata>
+			<!-- SKILLS -->
+			<genericcontrol name="skillframe">
+				<bounds>15,20,480,520</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<stringcontrol>
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>23,9</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>
+			</stringcontrol>
+			<stringcontrol>
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>136,9</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>ranks</static>
+			</stringcontrol>
+			<stringcontrol>
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>165,9</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>stat</static>
+			</stringcontrol>
+			<stringcontrol>
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>187,9</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>misc</static>
+			</stringcontrol>
+			<stringcontrol>
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>211,9</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>total</static>
+			</stringcontrol>
+
+			<stringcontrol>
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>255,9</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>
+			</stringcontrol>
+			<stringcontrol>
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>368,9</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>ranks</static>
+			</stringcontrol>
+			<stringcontrol>
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>397,9</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>stat</static>
+			</stringcontrol>
+			<stringcontrol>
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>419,9</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>misc</static>
+			</stringcontrol>
+			<stringcontrol>
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>443,9</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>total</static>
+			</stringcontrol>
+
+			<windowlist name="skilllist">
+				<anchored>
+					<to>skillframe</to>
+					<position>over</position>
+					<offset>-8,-20</offset>
+				</anchored>
+				<datasource>.skilllist</datasource>
+				<class>charsheet_skilllistitem</class>
+				<allowcreate />
+				<columns>
+					<filldown />
+					<width>232</width>
+				</columns>
+				<script file="scripts/charsheet_skilllist.lua" />
+			</windowlist>
+
+			<!-- POINTS -->
+			<genericcontrol name="skillpointframe">
+				<bounds>15,540,480,50</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<numberfield name="unspentskillpoints" source="skillpoints.unspent">
+				<anchored>
+					<to>skillpointframe</to>
+					<position>insidetopleft</position>
+					<offset>60,15</offset>
+					<size>
+						<height>20</height>
+						<width>35</width>
+					</size>
+				</anchored>
+				<font>sheetnumbersmall</font>
+				<nodrag />
+				<frame>
+					<name>modifier</name>
+					<offset>3,3,3,3</offset>
+				</frame>
+				<script>
+					function onValueChanged()
+						if getValue() &lt; 0 then
+							setValue(0);
+						end
+					end
+				</script>
+			</numberfield>
+			<stringcontrol>
+				<anchored>
+					<to>skillpointframe</to>
+					<position>insidetopleft</position>
+					<offset>13,15</offset>
+					<size>
+						<height>21</height>
+						<width>45</width>
+					</size>
+				</anchored>
+				<static>Available ranks</static>
+				<font>sheetlabelsmall</font>
+				<multilinespacing>10</multilinespacing>
+			</stringcontrol>
+			
+			<numbercontrol name="plannedskillpoints" source="skillpoints.planned">
+				<anchored>
+					<to>skillpointframe</to>
+					<position>insidetopleft</position>
+					<offset>150,15</offset>
+					<size>
+						<height>20</height>
+						<width>35</width>
+					</size>
+				</anchored>
+				<font>sheetnumbersmall</font>
+				<color>#ffbb0000</color>
+				<hideonvalue>0</hideonvalue>
+				<readonly />
+				<nodrag />
+				<frame>
+					<name>modifier</name>
+					<offset>3,3,3,3</offset>
+				</frame>
+				<script>
+					function calculatePoints()
+						local points = 0;
+					
+						for k, v in pairs(window.skilllist.getDatabaseNode().getChildren()) do
+							if v.getChild("plannedranks") then
+								points = points + v.getChild("plannedranks").getValue();
+							end
+							if v.getChild("plannedhalfranks") then
+								points = points + v.createChild("plannedhalfranks").getValue();
+							end
+						end
+						
+						setValue(points);
+						
+						if points ~= 0 and points == window.unspentskillpoints.getValue() then
+							window.submitplan.setVisible(true);
+						else
+							window.submitplan.setVisible(false);
+						end
+					end
+					
+					function onClickDown(button, x, y)
+						if button == 2 then
+							window.skilllist.resetPlannedPoints();
+							return true;
+						end
+					end
+					
+					function onMenuSelection()
+						window.skilllist.submitPlannedPoints();
+					end
+				
+					function onInit()
+						calculatePoints();
+						registerMenuItem("Submit planned ranks", "edit", 5);
+					end
+				</script>
+			</numbercontrol>
+			<stringcontrol>
+				<anchored>
+					<to>skillpointframe</to>
+					<position>insidetopleft</position>
+					<offset>103,15</offset>
+					<size>
+						<height>21</height>
+						<width>45</width>
+					</size>
+				</anchored>
+				<static>Planned ranks</static>
+				<font>sheetlabelsmall</font>
+				<multilinespacing>10</multilinespacing>
+			</stringcontrol>
+			
+			<buttoncontrol name="submitplan">
+				<anchored>
+					<to>skillpointframe</to>
+					<position>insidetopleft</position>
+					<offset>190,14</offset>
+					<size>
+						<width>32</width>
+						<height>23</height>
+					</size>
+				</anchored>
+				<icon>
+					<normal>button_submit</normal>
+					<pressed>button_submit_down</pressed>
+				</icon>
+				<invisible />
+				<script>
+					function onButtonPress()
+						window.skilllist.submitPlannedPoints();
+					end
+				</script>
+			</buttoncontrol>
+			
+<!--
+			<numbercontrol name="skillpoints">
+				<anchored>
+					<to>skillpointframe</to>
+					<position>insidetopleft</position>
+					<offset>150,14</offset>
+					<size>
+						<height>21</height>
+						<width>35</width>
+					</size>
+				</anchored>
+				<font>sheetnumber</font>
+				<frame>
+					<name>modifier</name>
+					<offset>3,3,3,3</offset>
+				</frame>
+				<readonly />
+				<script>
+					function calculatePoints()
+						local points = 0;
+					
+						for k, v in pairs(window.skilllist.getDatabaseNode().getChildren()) do
+							if v.getChild("ranks") then
+								points = points + v.getChild("ranks").getValue();
+							end
+							if v.getChild("halfranks") then
+								points = points + v.createChild("halfranks").getValue();
+							end
+						end
+						
+						setValue(points);
+					end
+				
+					function onInit()
+						calculatePoints();
+					end
+				</script>
+			</numbercontrol>
+-->
+			<skillsetlabel name="class1" source="classes.slot1.name">
+				<anchored>
+					<to>skillpointframe</to>
+					<position>insidetopleft</position>
+					<offset>255,16</offset>
+					<size>
+						<height>20</height>
+						<width>60</width>
+					</size>
+				</anchored>
+				<empty>&#171; Set 1 &#187;</empty>
+				<target>class1set</target>
+				<defaultset />
+			</skillsetlabel>
+			<skillsetcontrol name="class1set">
+				<anchored>
+					<to>class1</to>
+					<position>left</position>
+					<offset>0,-4</offset>
+					<size>
+						<width>13</width>
+					</size>
+				</anchored>
+				<setid>1</setid>
+			</skillsetcontrol>
+
+			<skillsetlabel name="class2" source="classes.slot2.name">
+				<anchored>
+					<to>skillpointframe</to>
+					<position>insidetopleft</position>
+					<offset>330,16</offset>
+					<size>
+						<height>20</height>
+						<width>60</width>
+					</size>
+				</anchored>
+				<target>class2set</target>
+			</skillsetlabel>
+			<skillsetcontrol name="class2set">
+				<anchored>
+					<to>class2</to>
+					<position>left</position>
+					<offset>0,-4</offset>
+					<size>
+						<width>13</width>
+					</size>
+				</anchored>
+				<setid>2</setid>
+			</skillsetcontrol>
+
+			<skillsetlabel name="class3" source="classes.slot3.name">
+				<anchored>
+					<to>skillpointframe</to>
+					<position>insidetopleft</position>
+					<offset>405,16</offset>
+					<size>
+						<height>20</height>
+						<width>60</width>
+					</size>
+				</anchored>
+				<target>class3set</target>
+			</skillsetlabel>
+			<skillsetcontrol name="class3set">
+				<anchored>
+					<to>class3</to>
+					<position>left</position>
+					<offset>0,-4</offset>
+					<size>
+						<width>13</width>
+					</size>
+				</anchored>
+				<setid>3</setid>
+			</skillsetcontrol>
+		</sheetdata>
+	</windowclass>
+</root>

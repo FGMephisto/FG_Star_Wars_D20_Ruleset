@@ -1,0 +1,706 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<root version="2.0">
+	<windowclass name="reference_spelllistitem">
+		<sizelimits>
+			<minimum>
+				<height>20</height>
+			</minimum>
+		</sizelimits>
+		<script>
+			function onInit()
+				spellnode = link.getTargetDatabaseNode();
+
+				if spellnode then
+					local namenode = spellnode.getChild("name");
+					local shortdescnode = spellnode.getChild("shortdescription");
+					
+					if namenode then
+						name.setValue(namenode.getValue());
+					end
+					if shortdescnode then
+						shortdescription.setValue(shortdescnode.getValue());
+					end
+				end
+			end
+		</script>
+		<sheetdata>
+			<windowreferencefield name="link">
+				<bounds>5,0,20,20</bounds>
+				<icon>
+					<normal>button_openwindow</normal>
+					<pressed>button_emptytarget</pressed>
+				</icon>
+				<script>
+					function onDrag(button, x, y, draginfo)
+						draginfo.setType("spelldescwithlevel");
+						draginfo.setIcon(icon[1].normal[1]);
+						draginfo.setNumberData(window.getDatabaseNode().getChild("level").getValue());
+						draginfo.setShortcutData(getValue());
+						draginfo.setDescription(getTargetDatabaseNode().getChild("name").getValue());
+						
+						local base = draginfo.createBaseData("shortcut");
+						base.setShortcutData(getValue());
+						
+						draginfo.resetType();
+						
+						return true;
+					end
+				</script>
+			</windowreferencefield>
+
+			<staticlinkstringcontrol name="name">
+				<bounds>30,2,200,15</bounds>
+				<font>chatfont</font>
+				<underlineoffset>0</underlineoffset>
+				<linktarget>link</linktarget>
+			</staticlinkstringcontrol>
+
+			<stringcontrol name="shortdescription">
+				<bounds>235,2,-1,15</bounds>
+				<font>chatfont</font>
+				<static />
+			</stringcontrol>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="reference_spellgrouplistitem">
+		<sizelimits>
+			<minimum>
+				<height>15</height>
+			</minimum>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<sheetdata>
+			<stringfield name="description">
+				<bounds>1,3,-2,15</bounds>
+				<font>sheetlabelsmallbold</font>
+				<script>
+					function onClickDown(button, x, y)
+						window.spelllist.setVisible(not window.spelllist.isVisible());
+					end
+				</script>
+				<static />
+			</stringfield>
+			
+			<windowlist name="spelllist">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+					</left>
+					<right>
+						<anchor>right</anchor>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>16</offset>
+					</top>
+				</anchored>
+				<datasource>.spells</datasource>
+				<class>reference_spelllistitem</class>
+				<noscroll />
+				<script>
+					function onFilter(w)
+						local top = w.windowlist.window;
+						while top.windowlist do
+							top = top.windowlist.window;
+						end
+						
+						local f = string.lower(top.filter.getValue());
+						
+						if f == "" then
+							return true;
+						end
+						
+						if string.find(string.lower(w.name.getValue()), f, 0, true) then
+							return true;
+						end
+						
+						return false;
+					end
+				</script>
+			</windowlist>
+		</sheetdata>
+	</windowclass>
+
+	<!-- Class spell lists -->
+	<windowclass name="reference_classspelllist">
+		<frame>referencebox</frame>
+		<placement>
+			<size>
+				<width>700</width>
+				<height>450</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<dynamic>
+				<resize>vertical</resize>
+			</dynamic>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<minimize>minimized_reference</minimize>
+		<tooltip>
+			<field>description</field>
+		</tooltip>
+		<sheetdata>
+			<stringfield name="description">
+				<bounds>17,20,-20,20</bounds>
+				<font>sheetlabel</font>
+				<center />
+				<static />
+			</stringfield>
+			
+			<windowlist name="grouplist">
+				<bounds>17,40,-20,-14</bounds>
+				<datasource>.groups</datasource>
+				<class>reference_spellgrouplistitem</class>
+			</windowlist>
+			<scrollercontrol>
+				<anchored>
+					<to>grouplist</to>
+					<position>insidebottomright</position>
+				</anchored>
+				<target>grouplist</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+			
+			<filter name="filter">
+				<bounds>55,-50,-50,20</bounds>
+				<target>grouplist,spelllist</target>
+				<trigger>filtertrigger</trigger>
+			</filter>
+			<filtertrigger name="filtertrigger">
+				<bounds>-43,-83,21,41</bounds>
+				<target>filter</target>
+			</filtertrigger>			
+		</sheetdata>
+	</windowclass>
+
+	<!-- Spells by school -->
+	<windowclass name="reference_schoollistitem">
+		<sizelimits>
+			<minimum>
+				<height>15</height>
+			</minimum>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<sheetdata>
+			<stringfield name="description">
+				<bounds>1,3,-2,15</bounds>
+				<font>sheetlabel</font>
+				<script>
+					function onClickDown(button, x, y)
+						window.schoolspelllist.setVisible(not window.schoolspelllist.isVisible());
+					end
+				</script>
+				<static />
+			</stringfield>
+			
+			<windowlist name="schoolspelllist">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+					</left>
+					<right>
+						<anchor>right</anchor>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>16</offset>
+					</top>
+				</anchored>
+				<datasource>.groups</datasource>
+				<class>reference_spellgrouplistitem</class>
+				<noscroll />
+			</windowlist>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="reference_schoolspelllist">
+		<frame>referencebox</frame>
+		<placement>
+			<size>
+				<width>700</width>
+				<height>450</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<dynamic>
+				<resize>vertical</resize>
+			</dynamic>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<minimize>minimized_reference</minimize>
+		<tooltip>
+			<field>description</field>
+		</tooltip>
+		<sheetdata>
+			<stringfield name="description">
+				<bounds>17,20,-20,20</bounds>
+				<font>sheetlabel</font>
+				<center />
+				<static />
+			</stringfield>
+			
+			<windowlist name="schoollist">
+				<bounds>17,40,-20,-14</bounds>
+				<datasource>.schools</datasource>
+				<class>reference_schoollistitem</class>
+			</windowlist>
+			<scrollercontrol>
+				<anchored>
+					<to>schoollist</to>
+					<position>insidebottomright</position>
+				</anchored>
+				<target>schoollist</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+			
+			<filter name="filter">
+				<bounds>55,-50,-50,20</bounds>
+				<target>schoollist,schoolspelllist,spelllist</target>
+				<trigger>filtertrigger</trigger>
+			</filter>
+			<filtertrigger name="filtertrigger">
+				<bounds>-43,-83,21,41</bounds>
+				<target>filter</target>
+			</filtertrigger>			
+		</sheetdata>
+	</windowclass>
+
+	<!-- Domain spells -->
+	<windowclass name="reference_domainspelllistitem">
+		<sizelimits>
+			<minimum>
+				<height>20</height>
+			</minimum>
+		</sizelimits>
+		<script>
+			function onInit()
+				spellnode = link.getTargetDatabaseNode();
+
+				if spellnode then
+					local namenode = spellnode.getChild("name");
+					local shortdescnode = spellnode.getChild("shortdescription");
+					
+					if namenode then
+						name.setValue(namenode.getValue());
+					end
+					if shortdescnode then
+						shortdescription.setValue(shortdescnode.getValue());
+					end
+				end
+			end
+		</script>
+		<sheetdata>
+			<windowreferencefield name="link">
+				<bounds>5,0,20,20</bounds>
+				<icon>
+					<normal>button_openwindow</normal>
+					<pressed>button_emptytarget</pressed>
+				</icon>
+			</windowreferencefield>
+			<stringcontrol name="name">
+				<bounds>30,2,200,15</bounds>
+				<font>chatfont</font>
+				<static />
+			</stringcontrol>
+			<numberfield name="level">
+				<bounds>235,2,20,11</bounds>
+				<font>chatfont</font>
+				<readonly />
+			</numberfield>
+			<stringcontrol name="shortdescription">
+				<bounds>265,2,-1,15</bounds>
+				<font>chatfont</font>
+				<static />
+			</stringcontrol>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="reference_domainlistitem">
+		<sizelimits>
+			<minimum>
+				<height>15</height>
+			</minimum>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<sheetdata>
+			<stringfield name="description">
+				<bounds>1,3,-2,15</bounds>
+				<font>sheetlabel</font>
+				<script>
+					function onClickDown(button, x, y)
+						local state = not window.domainspelllist.isVisible();
+						window.domainspelllist.setVisible(state);
+						window.grantedpower.setVisible(state);
+					end
+				</script>
+				<static />
+			</stringfield>
+			<stringfield name="grantedpower">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>1</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>2</offset>
+					</right>
+					<top>
+						<parent>description</parent>
+						<anchor>bottom</anchor>
+						<offset>1</offset>
+					</top>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<multilinespacing>13</multilinespacing>
+				<script>
+					function onClickDown(button, x, y)
+						window.domainspelllist.setVisible(not window.domainspelllist.isVisible());
+					end
+				</script>
+				<static />
+			</stringfield>
+			
+			<windowlist name="domainspelllist">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+					</left>
+					<right>
+						<anchor>right</anchor>
+					</right>
+					<top>
+						<parent>grantedpower</parent>
+						<anchor>bottom</anchor>
+						<offset>3</offset>
+					</top>
+				</anchored>
+				<datasource>.spells</datasource>
+				<class>reference_domainspelllistitem</class>
+				<noscroll />
+				<script>
+					function onSortCompare(w1, w2)
+						return w1.level.getValue() &gt; w2.level.getValue();
+					end
+
+					function onFilter(w)
+						local top = w.windowlist.window;
+						while top.windowlist do
+							top = top.windowlist.window;
+						end
+						
+						local f = string.lower(top.filter.getValue());
+						
+						if f == "" then
+							return true;
+						end
+						
+						if string.find(string.lower(w.name.getValue()), f, 0, true) then
+							return true;
+						end
+						
+						return false;
+					end
+				</script>
+			</windowlist>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="reference_domainlist">
+		<frame>referencebox</frame>
+		<placement>
+			<size>
+				<width>700</width>
+				<height>450</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<dynamic>
+				<resize>vertical</resize>
+			</dynamic>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<minimize>minimized_reference</minimize>
+		<tooltip>
+			<field>description</field>
+		</tooltip>
+		<sheetdata>
+			<stringfield name="description">
+				<bounds>17,20,-20,20</bounds>
+				<font>sheetlabel</font>
+				<center />
+				<static />
+			</stringfield>
+			
+			<windowlist name="domainlist">
+				<bounds>17,40,-20,-14</bounds>
+				<datasource>.domains</datasource>
+				<class>reference_domainlistitem</class>
+			</windowlist>
+			<scrollercontrol>
+				<anchored>
+					<to>domainlist</to>
+					<position>insidebottomright</position>
+				</anchored>
+				<target>domainlist</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+			
+			<filter name="filter">
+				<bounds>55,-50,-50,20</bounds>
+				<target>domainlist,domainspelllist</target>
+				<trigger>filtertrigger</trigger>
+			</filter>
+			<filtertrigger name="filtertrigger">
+				<bounds>-43,-83,21,41</bounds>
+				<target>filter</target>
+			</filtertrigger>			
+		</sheetdata>
+	</windowclass>
+	
+	<!-- Spell description sheet -->
+	<windowclass name="spelldesc_stats">
+		<sheetdata>
+			<!-- Fields -->
+			<stringfield name="school">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>0</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-7</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>3</offset>
+					</top>
+				</anchored>
+				<font>chatfont</font>
+				<multilinespacing>13</multilinespacing>
+			</stringfield>
+			
+			<columnstringfield name="level">
+				<anchor>school</anchor>
+			</columnstringfield>
+			<columnfieldlabel>
+				<anchor>level</anchor>
+				<static>Level</static>
+			</columnfieldlabel>
+			
+			<columnstringfield name="components">
+				<anchor>level</anchor>
+			</columnstringfield>
+			<columnfieldlabel>
+				<anchor>components</anchor>
+				<static>Components</static>
+			</columnfieldlabel>
+
+			<columnstringfield name="castingtime">
+				<anchor>components</anchor>
+			</columnstringfield>
+			<columnfieldlabel>
+				<anchor>castingtime</anchor>
+				<static>Casting time</static>
+			</columnfieldlabel>
+
+			<columnstringfield name="range">
+				<anchor>castingtime</anchor>
+			</columnstringfield>
+			<columnfieldlabel>
+				<anchor>range</anchor>
+				<static>Range</static>
+			</columnfieldlabel>
+
+			<columnstringfield name="effect">
+				<anchor>range</anchor>
+			</columnstringfield>
+			<columnfieldlabel>
+				<anchor>effect</anchor>
+				<static>Effect/target</static>
+			</columnfieldlabel>
+
+			<columnstringfield name="duration">
+				<anchor>effect</anchor>
+			</columnstringfield>
+			<columnfieldlabel>
+				<anchor>duration</anchor>
+				<static>Duration</static>
+			</columnfieldlabel>
+
+			<columnstringfield name="save">
+				<anchor>duration</anchor>
+			</columnstringfield>
+			<columnfieldlabel>
+				<anchor>save</anchor>
+				<static>Saving throw</static>
+			</columnfieldlabel>
+
+			<columnstringfield name="sr">
+				<anchor>save</anchor>
+			</columnstringfield>
+			<columnfieldlabel>
+				<anchor>sr</anchor>
+				<static>Spell resist.</static>
+			</columnfieldlabel>
+
+			<formattedtextfield name="description">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>0</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-7</offset>
+					</right>
+					<top>
+						<parent>sr</parent>
+						<anchor>bottom</anchor>
+						<offset>8</offset>
+					</top>
+				</anchored>
+				<font>
+					<normal>chatfont</normal>
+					<bold>narratorfont</bold>
+					<italic>chatitalicfont</italic>
+					<bolditalic>chatbolditalicfont</bolditalic>
+					<title>defaultstringcontrol</title>
+				</font>
+				<linkicon>
+					<link>button_openwindow</link>
+					<emptylink>button_emptytarget</emptylink>
+				</linkicon>
+				<footer>footer_wide</footer>
+				<selectioncolor>#FFD296</selectioncolor>
+			</formattedtextfield>
+			
+			<!-- Spacer -->
+			<genericcontrol>
+				<anchored>
+					<to>description</to>
+					<position>below</position>
+					<size>
+						<height>15</height>
+					</size>
+				</anchored>
+			</genericcontrol>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="spelldesc">
+		<frame>charsheet</frame>
+		<placement>
+			<size>
+				<width>300</width>
+				<height>370</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<dynamic />
+		</sizelimits>
+		<minimize>minimized_reference</minimize>
+		<tooltip>
+			<field>name</field>
+		</tooltip>
+		<sheetdata>
+			<!-- Name -->
+			<genericcontrol name="nameframe">
+				<bounds>10,20,-15,35</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowopencontrol>
+				<anchored>
+					<to>nameframe</to>
+					<position>insidetopleft</position>
+					<offset>13,8</offset>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<icon>
+					<normal>button_openwindow</normal>
+					<pressed>button_emptytarget</pressed>
+				</icon>
+				<class>spelldesc</class>
+				<description>
+					<field>name</field>
+				</description>
+			</windowopencontrol>
+			<stringfield name="name">
+				<anchored>
+					<top>
+						<parent>nameframe</parent>
+						<anchor>top</anchor>
+						<offset>9</offset>
+					</top>
+					<left>
+						<parent>nameframe</parent>
+						<anchor>left</anchor>
+						<offset>35</offset>
+					</left>
+					<right>
+						<parent>nameframe</parent>
+						<anchor>right</anchor>
+						<offset>-15</offset>
+					</right>
+				</anchored>
+				<empty>&#171; New Spell &#187;</empty>
+				<font>sheettext</font>
+			</stringfield>
+
+			<!-- Frame -->		
+			<genericcontrol name="contentframe">
+				<bounds>10,54,-15,-13</bounds>
+				<frame>
+					<name>sheetgroup</name>
+					<offset>0,1,0,0</offset>
+				</frame>
+			</genericcontrol>
+
+			<subwindow name="stats">
+				<bounds>22,61,-25,-21</bounds>
+				<class>spelldesc_stats</class>
+				<activate />
+			</subwindow>
+			<scrollercontrol name="stats_scroller">
+				<anchored>
+					<to>stats</to>
+					<position>insidebottomright</position>
+				</anchored>
+				<target>stats</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+		</sheetdata>
+	</windowclass>
+</root>

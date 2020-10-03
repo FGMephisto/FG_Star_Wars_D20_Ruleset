@@ -1,0 +1,875 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<root version="2.0">
+	<script name="MinisheetSnapper" file="scripts/minisheet_snapper.lua" />
+
+	<windowclass name="charsheetmini_main">
+		<frame>minisheet</frame>
+		<placement>
+			<size>
+				<width>220</width>
+				<height>108</height>
+			</size>
+		</placement>
+		<nodelete />
+		<script file="scripts/minisheet.lua" />
+		<sheetdata>
+			<!-- Name -->
+			<labeledstring name="name">
+				<bounds>15,15,120,20</bounds>
+				<label>name</label>
+				<static />
+			</labeledstring>
+		
+			<!-- AC -->
+			<modifiernumber name="ac" source="ac.totals.general">
+				<bounds>147,27,51,32</bounds>
+				<frame>
+					<name>acicon</name>
+					<offset>9,16,5,24</offset>
+				</frame>
+				<font>sheetnumber</font>
+				<description>
+					<text>Armor Class</text>
+				</description>
+				<modifierfield>ac.sources.temporary</modifierfield>
+				<source>
+					<name>abilities.dexterity.bonus</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>ac.sources.armor</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>ac.sources.shield</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>ac.sources.size</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>ac.sources.naturalarmor</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>ac.sources.deflection</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>ac.sources.misc</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>encumbrance.armormaxdexbonus</name>
+				</source>
+				<source>
+					<name>encumbrance.armormaxdexbonusactive</name>
+				</source>
+				<script>
+					function onSourceUpdate()
+						setValue(10 + calculateSources());
+					end
+					
+					function onSourceValue(source, sourcename)
+						if sourcename == "abilities.dexterity.bonus" then
+							local dex = source.getValue();
+							local max = sources["encumbrance.armormaxdexbonus"].getValue();
+							local maxactive = sources["encumbrance.armormaxdexbonusactive"].getValue();
+							
+							if maxactive == 0 or max > dex then
+								return dex;
+							else
+								return max;
+							end
+						else
+							return super.onSourceValue(source, sourcename);
+						end
+					end
+				</script>
+			</modifiernumber>
+			<stringcontrol>
+				<anchored>
+					<to>ac</to>
+					<position>below</position>
+					<offset>0,22</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<center />
+				<static>AC</static>
+			</stringcontrol>
+
+			<!-- HP -->
+			<hitpointfield name="hp" source="hp.total">
+				<bounds>15,51,35,25</bounds>
+				<noreset />
+			</hitpointfield>
+			<stringcontrol>
+				<anchored>
+					<to>hp</to>
+					<position>below</position>
+					<offset>0,5</offset>
+				</anchored>
+				<static>HP</static>
+				<center />
+				<font>sheetlabelsmall</font>
+			</stringcontrol>
+
+			<hitpointfield name="wounds" source="hp.wounds">
+				<anchored>
+					<to>hp</to>
+					<position>right</position>
+					<offset>10,0</offset>
+					<size>
+						<width>35</width>
+					</size>
+				</anchored>
+			</hitpointfield>
+			<stringcontrol>
+				<anchored>
+					<to>wounds</to>
+					<position>below</position>
+					<offset>5,5</offset>
+				</anchored>
+				<static>Wounds</static>
+				<center />
+				<font>sheetlabelsmall</font>
+			</stringcontrol>
+
+			<hitpointfield name="nonlethal" source="hp.nonlethal">
+				<anchored>
+					<to>wounds</to>
+					<position>right</position>
+					<offset>10,0</offset>
+					<size>
+						<width>35</width>
+					</size>
+				</anchored>
+			</hitpointfield>
+			<stringcontrol>
+				<anchored>
+					<to>nonlethal</to>
+					<position>below</position>
+					<offset>5,5</offset>
+				</anchored>
+				<static>Nonlethal</static>
+				<center />
+				<font>sheetlabelsmall</font>
+			</stringcontrol>
+		</sheetdata>
+	</windowclass>
+	
+	<windowclass name="charsheetmini_inventoryitem">
+		<sizelimits>
+			<minimum>
+				<height>10</height>
+			</minimum>
+		</sizelimits>
+		<script>
+			function updateStatus()
+				windowlist.applyFilter();
+			end
+		
+			function onInit()
+				statusnode = getDatabaseNode().createChild("showonminisheet", "number");
+				statusnode.onUpdate = updateStatus;
+			end
+		</script>
+		<sheetdata>
+			<numberfield name="count">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+					</left>
+					<top>
+						<anchor>top</anchor>
+						<offset>1</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>15</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>textlinesmall</name>
+					<offset>0,-1,0,0</offset>
+				</frame>
+				<keyeditframe>
+					<name>sheetfocus</name>
+					<offset>6,5,6,5</offset>
+				</keyeditframe>
+				<font>sheetnumbersmall</font>
+				<hideonvalue>0</hideonvalue>
+				<noreset />
+				<nodrag />
+				<delaykeyupdate />
+			</numberfield>
+			<textlistitemvalue name="name">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>23</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+				</anchored>
+			</textlistitemvalue>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charsheetmini_inventory">
+		<frame>minisheet</frame>
+		<placement>
+			<size>
+				<width>220</width>
+				<height>150</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<dynamic>
+				<resize>vertical</resize>
+			</dynamic>
+		</sizelimits>
+		<nodelete />
+		<script file="scripts/minisheet.lua" />
+		<sheetdata>
+			<windowlist name="inventorylist">
+				<bounds>10,10,-10,-15</bounds>
+				<datasource>.inventorylist</datasource>
+				<class>charsheetmini_inventoryitem</class>
+				<allowcreate />
+				<script>
+					function onFilter(w)
+						local node = w.getDatabaseNode().getChild("showonminisheet");
+						if node and node.getValue() ~= 0 then
+							return true;
+						end
+						return false;
+					end
+				
+					function onSortCompare(w1, w2)
+						if w1.name.getValue() == "" then
+							return true;
+						elseif w2.name.getValue() == "" then
+							return false;
+						end
+					
+						return w1.name.getValue() &gt; w2.name.getValue();
+					end
+				</script>
+			</windowlist>
+			<scrollercontrol>
+				<anchored>
+					<to>inventorylist</to>
+					<position>insidebottomright</position>
+					<size>
+						<width>45</width>
+						<height>27</height>
+					</size>
+				</anchored>
+				<target>inventorylist</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charsheetmini_coins">
+		<frame>minisheet</frame>
+		<placement>
+			<size>
+				<width>220</width>
+				<height>65</height>
+			</size>
+		</placement>
+		<nodelete />
+		<script file="scripts/minisheet.lua" />
+		<sheetdata>
+			<sheetnumber name="coinamount1" source="coins.slot1.amount">
+				<bounds>11,28,45,21</bounds>
+				<frame>
+					<name>modifier</name>
+					<offset>5,3,5,3</offset>
+				</frame>
+				<keyeditframe>
+					<name>sheetfocus</name>
+					<offset>5,3,5,3</offset>
+				</keyeditframe>
+				<font>sheetnumbersmall</font>
+				<noreset />
+				<stateframe>
+					<drophilight>
+						<name>sheetfocusplus</name>
+						<offset>5,5,5,5</offset>
+					</drophilight>
+				</stateframe>
+				<droptypes>
+					<type>number</type>
+				</droptypes>
+				<script>
+					function onDrop(x, y, draginfo)
+						if draginfo.isType("number") then
+							setValue(getValue() + draginfo.getNumberData());
+							return true;
+						end
+					end
+				</script>
+			</sheetnumber>
+			<genericcontrol>
+				<anchored>
+					<to>coinamount1</to>
+					<position>above</position>
+					<offset>0,-8</offset>
+				</anchored>
+				<icon>indicator_coin</icon>
+				<iconcolor>#FFFFFFFF</iconcolor>
+			</genericcontrol>
+
+			<sheetnumber name="coinamount2" source="coins.slot2.amount">
+				<anchored>
+					<to>coinamount1</to>
+					<position>right</position>
+					<offset>6,0</offset>
+					<size>
+						<width>45</width>
+					</size>
+				</anchored>
+				<frame>
+					<name>modifier</name>
+					<offset>5,3,5,3</offset>
+				</frame>
+				<keyeditframe>
+					<name>sheetfocus</name>
+					<offset>5,3,5,3</offset>
+				</keyeditframe>
+				<font>sheetnumbersmall</font>
+				<noreset />
+				<stateframe>
+					<drophilight>
+						<name>sheetfocusplus</name>
+						<offset>5,5,5,5</offset>
+					</drophilight>
+				</stateframe>
+				<droptypes>
+					<type>number</type>
+				</droptypes>
+				<script>
+					function onDrop(x, y, draginfo)
+						if draginfo.isType("number") then
+							setValue(getValue() + draginfo.getNumberData());
+							return true;
+						end
+					end
+				</script>
+			</sheetnumber>
+			<genericcontrol>
+				<anchored>
+					<to>coinamount2</to>
+					<position>above</position>
+					<offset>0,-8</offset>
+				</anchored>
+				<icon>indicator_coin</icon>
+				<iconcolor>#FFFFDF4B</iconcolor>
+			</genericcontrol>
+
+			<sheetnumber name="coinamount3" source="coins.slot3.amount">
+				<anchored>
+					<to>coinamount2</to>
+					<position>right</position>
+					<offset>6,0</offset>
+					<size>
+						<width>45</width>
+					</size>
+				</anchored>
+				<frame>
+					<name>modifier</name>
+					<offset>5,3,5,3</offset>
+				</frame>
+				<keyeditframe>
+					<name>sheetfocus</name>
+					<offset>5,3,5,3</offset>
+				</keyeditframe>
+				<font>sheetnumbersmall</font>
+				<noreset />
+				<stateframe>
+					<drophilight>
+						<name>sheetfocusplus</name>
+						<offset>5,5,5,5</offset>
+					</drophilight>
+				</stateframe>
+				<droptypes>
+					<type>number</type>
+				</droptypes>
+				<script>
+					function onDrop(x, y, draginfo)
+						if draginfo.isType("number") then
+							setValue(getValue() + draginfo.getNumberData());
+							return true;
+						end
+					end
+				</script>
+			</sheetnumber>
+			<genericcontrol>
+				<anchored>
+					<to>coinamount3</to>
+					<position>above</position>
+					<offset>0,-8</offset>
+				</anchored>
+				<icon>indicator_coin</icon>
+				<iconcolor>#FFE3E3E3</iconcolor>
+			</genericcontrol>
+
+			<sheetnumber name="coinamount4" source="coins.slot4.amount">
+				<anchored>
+					<to>coinamount3</to>
+					<position>right</position>
+					<offset>6,0</offset>
+					<size>
+						<width>45</width>
+					</size>
+				</anchored>
+				<frame>
+					<name>modifier</name>
+					<offset>5,3,5,3</offset>
+				</frame>
+				<keyeditframe>
+					<name>sheetfocus</name>
+					<offset>5,3,5,3</offset>
+				</keyeditframe>
+				<font>sheetnumbersmall</font>
+				<noreset />
+				<stateframe>
+					<drophilight>
+						<name>sheetfocusplus</name>
+						<offset>5,5,5,5</offset>
+					</drophilight>
+				</stateframe>
+				<droptypes>
+					<type>number</type>
+				</droptypes>
+				<script>
+					function onDrop(x, y, draginfo)
+						if draginfo.isType("number") then
+							setValue(getValue() + draginfo.getNumberData());
+							return true;
+						end
+					end
+				</script>
+			</sheetnumber>
+			<genericcontrol>
+				<anchored>
+					<to>coinamount4</to>
+					<position>above</position>
+					<offset>0,-8</offset>
+				</anchored>
+				<icon>indicator_coin</icon>
+				<iconcolor>#FFDDA15B</iconcolor>
+			</genericcontrol>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charsheetmini_spelllistitem">
+		<sizelimits>
+			<minimum>
+				<height>16</height>
+			</minimum>
+		</sizelimits>
+		<minisheet />
+		<script file="scripts/charsheet_spelllistitem.lua" />
+		<sheetdata>
+			<spellcounter name="counter">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>15</height>
+					</size>
+				</anchored>
+				<minisheet />
+			</spellcounter>
+			<windowreferencefield name="shortcut">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>0</offset>
+					</left>
+					<top>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>14</width>
+						<height>14</height>
+					</size>
+				</anchored>
+				<icon>
+					<normal>button_openwindow</normal>
+					<empty>button_emptytarget</empty>
+					<pressed>button_emptytarget</pressed>
+				</icon>
+			</windowreferencefield>
+			<stringfield name="name">
+				<anchored>
+					<left>
+						<parent>shortcut</parent>
+						<anchor>right</anchor>
+						<offset>1</offset>
+					</left>
+					<top>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<right>
+						<parent>counter</parent>
+						<anchor>left</anchor>
+						<offset>-5</offset>
+					</right>
+				</anchored>
+				<font>sheettextblock</font>
+				<static />
+			</stringfield>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charsheetmini_spelllistlevel">
+		<sizelimits>
+			<minimum>
+				<height>11</height>
+			</minimum>
+		</sizelimits>
+		<script>
+		</script>
+		<sheetdata>
+			<genericcontrol>
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>0</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>0</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>1</offset>
+					</top>
+					<size>
+						<height>12</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>rowshade</name>
+				</frame>
+			</genericcontrol>
+			<stringcontrol name="label">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>0</offset>
+					</left>
+					<top>
+						<anchor>top</anchor>
+						<offset>2</offset>
+					</top>
+				</anchored>
+				<font>sheetlabelsmallbold</font>
+				<empty>&#171; Empty level &#187;</empty>
+				<static />
+				<script>
+					function onClickDown(button, x, y)
+						window.spelllist.setVisible(not window.spelllist.isVisible());
+					end
+					
+					function updateLabel()
+						setValue(classnode.getValue() .. " Level " .. string.sub(window.getDatabaseNode().getName(), 6));
+					end
+					
+					function onInit()
+						local set = string.sub(window.getDatabaseNode().createChild("...").getName(), 4);
+						classnode = window.getDatabaseNode().createChild(".....class" .. set, "string");
+						classnode.onUpdate = updateLabel;
+						updateLabel();
+					end
+				</script>
+			</stringcontrol>
+
+			<windowlist name="spelllist">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>0</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>0</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>13</offset>
+					</top>
+				</anchored>
+				<datasource>.spells</datasource>
+				<class>charsheetmini_spelllistitem</class>
+				<noscroll />
+				<script file="scripts/charsheet_spelllist.lua" />
+				<minisheet />
+			</windowlist>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charsheetmini_spelllistset">
+		<sizelimits>
+			<minimum>
+				<height>11</height>
+			</minimum>
+		</sizelimits>
+		<script>
+			function onInit()
+				label = getDatabaseNode().createChild("...class" .. string.sub(getDatabaseNode().getName(), 4), "string");
+			end
+		</script>
+		<sheetdata>
+			<windowlist name="spelllevellist">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+					</left>
+					<right>
+						<anchor>right</anchor>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+				</anchored>
+				<datasource>.levels</datasource>
+				<class>charsheetmini_spelllistlevel</class>
+				<noscroll />
+				<minisheet />
+				<script file="scripts/charsheet_spelllevellist.lua" />
+			</windowlist>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charsheetmini_spells">
+		<frame>minisheet</frame>
+		<placement>
+			<size>
+				<width>220</width>
+				<height>200</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<dynamic>
+				<resize>vertical</resize>
+			</dynamic>
+		</sizelimits>
+		<nodelete />
+		<script file="scripts/minisheet.lua" />
+		<sheetdata>
+			<windowlist name="spellsetlist">
+				<bounds>11,10,-14,-15</bounds>
+				<datasource>.spellset</datasource>
+				<class>charsheetmini_spelllistset</class>
+				<minisheet />
+				<script>
+					function onFilter(w)
+						if w.label == "" then
+							return false;
+						end
+						
+						return true;
+					end
+
+					function onInit()
+						getDatabaseNode().createChild("set1");
+						getDatabaseNode().createChild("set2");
+						getDatabaseNode().createChild("set3");
+					end
+				</script>
+			</windowlist>
+			<scrollercontrol>
+				<anchored>
+					<to>spellsetlist</to>
+					<position>insidebottomright</position>
+					<size>
+						<width>45</width>
+						<height>27</height>
+					</size>
+				</anchored>
+				<target>spellsetlist</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charsheetmini_ammoitem">
+		<sizelimits>
+			<minimum>
+				<height>10</height>
+			</minimum>
+		</sizelimits>
+		<sheetdata>
+			<stringfield name="name">
+				<bounds>0,3,100,20</bounds>
+				<font>sheettextsmall</font>
+				<frame>
+					<name>textline</name>
+					<offset>0,1,0,0</offset>
+				</frame>
+			</stringfield>
+			<genericcontrol name="ammocounter">
+				<bounds>101,1,102,22</bounds>
+				<stateicons>
+					<on>indicator_checkon</on>
+					<off>indicator_checkoff</off>
+				</stateicons>
+				<spacing>
+					<horizontal>10</horizontal>
+					<vertical>10</vertical>
+				</spacing>
+				<slotcount>
+					<horizontal>10</horizontal>
+					<vertical>2</vertical>
+				</slotcount>
+				<fields>
+					<max>maxammo</max>
+					<count>ammo</count>
+				</fields>
+				<minisheet />
+				<script file="scripts/charsheet_ammocounter.lua" />
+			</genericcontrol>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charsheetmini_ammo">
+		<frame>minisheet</frame>
+		<placement>
+			<size>
+				<width>220</width>
+				<height>100</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<minimum>
+				<height>48</height>
+			</minimum>
+			<dynamic>
+				<resize>vertical</resize>
+			</dynamic>
+		</sizelimits>
+		<nodelete />
+		<script file="scripts/minisheet.lua" />
+		<sheetdata>
+			<windowlist name="list">
+				<bounds>10,10,-7,-15</bounds>
+				<datasource>.weaponlist</datasource>
+				<class>charsheetmini_ammoitem</class>
+				<script>
+					function onFilter(w)
+						local maxammonode = w.getDatabaseNode().getChild("maxammo");
+						if maxammonode and maxammonode.getValue() ~= 0 then
+							return true;
+						end
+						return false;
+					end
+					
+					function onInit()
+						applyFilter();
+					end
+				</script>
+			</windowlist>
+			<scrollercontrol>
+				<anchored>
+					<to>list</to>
+					<position>insidebottomright</position>
+					<size>
+						<width>45</width>
+						<height>27</height>
+					</size>
+				</anchored>
+				<target>list</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charsheetmini_specialabilities">
+		<frame>minisheet</frame>
+		<placement>
+			<size>
+				<width>220</width>
+				<height>150</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<dynamic>
+				<resize>vertical</resize>
+			</dynamic>
+			<minimum>
+				<height>48</height>
+			</minimum>
+		</sizelimits>
+		<nodelete />
+		<script file="scripts/minisheet.lua" />
+		<sheetdata>
+			<windowlist name="inventorylist">
+				<bounds>10,10,-10,-15</bounds>
+				<datasource>.specialabilitylist</datasource>
+				<class>charsheet_specialabilityitem</class>
+				<script>
+					function onFilter(w)
+						local node = w.getDatabaseNode();
+						if node and (node.getChild("number") or node.getChild("dice")) then
+							return true;
+						end
+						return false;
+					end
+				
+					function onSortCompare(w1, w2)
+						if w1.value.getValue() == "" then
+							return true;
+						elseif w2.value.getValue() == "" then
+							return false;
+						end
+					
+						return w1.value.getValue() &gt; w2.value.getValue();
+					end
+				</script>
+			</windowlist>
+			<scrollercontrol>
+				<anchored>
+					<to>inventorylist</to>
+					<position>insidebottomright</position>
+					<size>
+						<width>45</width>
+						<height>27</height>
+					</size>
+				</anchored>
+				<target>inventorylist</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+		</sheetdata>
+	</windowclass>
+</root>

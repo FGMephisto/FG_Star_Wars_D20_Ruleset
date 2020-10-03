@@ -1,0 +1,1420 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<root version="2.0">
+	<windowclass name="charsheet_languagelistitem">
+		<sizelimits>
+			<minimum>
+				<height>10</height>
+			</minimum>
+		</sizelimits>
+		<sheetdata>
+			<textlistitemvalue name="name">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+					</left>
+					<right>
+						<anchor>right</anchor>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+				</anchored>
+			</textlistitemvalue>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charsheet_main">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<nodelete />
+		<sheetdata>
+			<genericcontrol>
+				<bounds>432,30,60,51</bounds>
+				<icon>cs_logo</icon>
+			</genericcontrol>
+		
+			<!-- OVERVIEW -->
+			<genericcontrol name="overviewframe">
+				<bounds>15,20,415,70</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<labeledstring name="name">
+				<anchored>
+					<to>overviewframe</to>
+					<position>insidetopleft</position>
+					<offset>15,10</offset>
+					<size>
+						<width>250</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<anchorto>overviewframe</anchorto>
+				<height>20</height>
+				<label>name</label>
+				<tabtarget>
+					<next>race</next>
+					<prev>appearance</prev>
+				</tabtarget>
+			</labeledstring>
+
+			<labeledstring name="race">
+				<anchored>
+					<to>overviewframe</to>
+					<position>insidetopleft</position>
+					<offset>275,10</offset>
+					<size>
+						<width>125</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<label>race</label>
+				<tabtarget>
+					<next>gender</next>
+					<prev>name</prev>
+				</tabtarget>
+			</labeledstring>
+
+			<labeledstring name="gender">
+				<anchored>
+					<to>overviewframe</to>
+					<position>insidetopleft</position>
+					<offset>15,32</offset>
+					<size>
+						<width>60</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<label>gender</label>
+				<tabtarget>
+					<next>age</next>
+					<prev>race</prev>
+				</tabtarget>
+			</labeledstring>
+
+			<labeledstring name="age">
+				<anchored>
+					<to>overviewframe</to>
+					<position>insidetopleft</position>
+					<offset>80,32</offset>
+					<size>
+						<width>60</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<label>age</label>
+				<tabtarget>
+					<next>alignment</next>
+					<prev>gender</prev>
+				</tabtarget>
+			</labeledstring>
+
+			<labeledstring name="alignment">
+				<anchored>
+					<to>overviewframe</to>
+					<position>insidetopleft</position>
+					<offset>145,32</offset>
+					<size>
+						<width>60</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<label>alignment</label>
+				<tabtarget>
+					<next>height</next>
+					<prev>age</prev>
+				</tabtarget>
+			</labeledstring>
+
+			<labeledstring name="height">
+				<anchored>
+					<to>overviewframe</to>
+					<position>insidetopleft</position>
+					<offset>210,32</offset>
+					<size>
+						<width>60</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<label>height</label>
+				<tabtarget>
+					<next>weight</next>
+					<prev>alignment</prev>
+				</tabtarget>
+			</labeledstring>
+
+			<labeledstring name="weight">
+				<anchored>
+					<to>overviewframe</to>
+					<position>insidetopleft</position>
+					<offset>275,32</offset>
+					<size>
+						<width>60</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<label>weight</label>
+				<tabtarget>
+					<next>size</next>
+					<prev>height</prev>
+				</tabtarget>
+			</labeledstring>
+
+			<labeledstring name="size">
+				<anchored>
+					<to>overviewframe</to>
+					<position>insidetopleft</position>
+					<offset>340,32</offset>
+					<size>
+						<width>60</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<label>size</label>
+				<tabtarget>
+					<next>strength</next>
+					<prev>weight</prev>
+				</tabtarget>
+			</labeledstring>
+
+			<!-- ABILITIES -->
+			<genericcontrol name="abilityframe">
+				<bounds>15,90,240,200</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<abilityscore name="strength" source="abilities.strength.score">
+				<anchored>
+					<to>abilityframe</to>
+					<position>insidetopleft</position>
+					<offset>105,23</offset>
+				</anchored>
+				<tabtarget>
+					<next>strengthdamage</next>
+					<prev>size</prev>
+				</tabtarget>
+			</abilityscore>
+			<abilityscore name="dexterity" source="abilities.dexterity.score">
+				<anchored>
+					<to>strength</to>
+				</anchored>
+				<tabtarget>
+					<next>dexteritydamage</next>
+					<prev>strengthdamage</prev>
+				</tabtarget>
+			</abilityscore>
+			<abilityscore name="constitution" source="abilities.constitution.score">
+				<anchored>
+					<to>dexterity</to>
+				</anchored>
+				<tabtarget>
+					<next>constitutiondamage</next>
+					<prev>dexteritydamage</prev>
+				</tabtarget>
+			</abilityscore>
+			<abilityscore name="intelligence" source="abilities.intelligence.score">
+				<anchored>
+					<to>constitution</to>
+				</anchored>
+				<tabtarget>
+					<next>intelligencedamage</next>
+					<prev>constitutiondamage</prev>
+				</tabtarget>
+			</abilityscore>
+			<abilityscore name="wisdom" source="abilities.wisdom.score">
+				<anchored>
+					<to>intelligence</to>
+				</anchored>
+				<tabtarget>
+					<next>wisdomdamage</next>
+					<prev>intelligencedamage</prev>
+				</tabtarget>
+			</abilityscore>
+			<abilityscore name="charisma" source="abilities.charisma.score">
+				<anchored>
+					<to>wisdom</to>
+				</anchored>
+				<tabtarget>
+					<next>charismadamage</next>
+					<prev>wisdomdamage</prev>
+				</tabtarget>
+			</abilityscore>
+			
+			<abilitylabel>
+				<anchored>
+					<to>strength</to>
+				</anchored>
+				<static>Strength</static>
+			</abilitylabel>
+			<abilitylabel>
+				<anchored>
+					<to>dexterity</to>
+				</anchored>
+				<static>Dexterity</static>
+			</abilitylabel>
+			<abilitylabel>
+				<anchored>
+					<to>constitution</to>
+				</anchored>
+				<static>Constitution</static>
+			</abilitylabel>
+			<abilitylabel>
+				<anchored>
+					<to>intelligence</to>
+				</anchored>
+				<static>Intelligence</static>
+			</abilitylabel>
+			<abilitylabel>
+				<anchored>
+					<to>wisdom</to>
+				</anchored>
+				<static>Wisdom</static>
+			</abilitylabel>
+			<abilitylabel>
+				<anchored>
+					<to>charisma</to>
+				</anchored>
+				<static>Charisma</static>
+			</abilitylabel>
+			
+			<abilitydamage name="strengthdamage" source="abilities.strength.damage">
+				<anchored>
+					<to>strength</to>
+				</anchored>
+				<target>strength</target>
+				<tabtarget>
+					<next>dexterity</next>
+					<prev>strength</prev>
+				</tabtarget>
+			</abilitydamage>
+			<abilitydamage name="dexteritydamage" source="abilities.dexterity.damage">
+				<anchored>
+					<to>dexterity</to>
+				</anchored>
+				<target>dexterity</target>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>dexterity</prev>
+				</tabtarget>
+			</abilitydamage>
+			<abilitydamage name="constitutiondamage" source="abilities.constitution.damage">
+				<anchored>
+					<to>constitution</to>
+				</anchored>
+				<target>constitution</target>
+				<tabtarget>
+					<next>intelligence</next>
+					<prev>constitution</prev>
+				</tabtarget>
+			</abilitydamage>
+			<abilitydamage name="intelligencedamage" source="abilities.intelligence.damage">
+				<anchored>
+					<to>intelligence</to>
+				</anchored>
+				<target>intelligence</target>
+				<tabtarget>
+					<next>wisdom</next>
+					<prev>intelligence</prev>
+				</tabtarget>
+			</abilitydamage>
+			<abilitydamage name="wisdomdamage" source="abilities.wisdom.damage">
+				<anchored>
+					<to>wisdom</to>
+				</anchored>
+				<target>wisdom</target>
+				<tabtarget>
+					<next>charisma</next>
+					<prev>wisdom</prev>
+				</tabtarget>
+			</abilitydamage>
+			<abilitydamage name="charismadamage" source="abilities.charisma.damage">
+				<anchored>
+					<to>charisma</to>
+				</anchored>
+				<target>charisma</target>
+				<tabtarget>
+					<next>class1</next>
+					<prev>charisma</prev>
+				</tabtarget>
+			</abilitydamage>
+			
+			<abilitybonus name="strengthbonus" source="abilities.strength.bonus">
+				<anchored>
+					<to>strength</to>
+				</anchored>
+				<scorefield>abilities.strength.score</scorefield>
+				<damagefield>abilities.strength.damage</damagefield>
+				<modifierfield>abilities.strength.bonusmodifier</modifierfield>
+				<description>
+					<text>Strength bonus</text>
+				</description>
+			</abilitybonus>
+			<abilitybonus name="dexteritybonus" source="abilities.dexterity.bonus">
+				<anchored>
+					<to>dexterity</to>
+				</anchored>
+				<scorefield>abilities.dexterity.score</scorefield>
+				<damagefield>abilities.dexterity.damage</damagefield>
+				<modifierfield>abilities.dexterity.bonusmodifier</modifierfield>
+				<description>
+					<text>Dexterity bonus</text>
+				</description>
+			</abilitybonus>
+			<abilitybonus name="constitutionbonus" source="abilities.constitution.bonus">
+				<anchored>
+					<to>constitution</to>
+				</anchored>
+				<scorefield>abilities.constitution.score</scorefield>
+				<damagefield>abilities.constitution.damage</damagefield>
+				<modifierfield>abilities.constitution.bonusmodifier</modifierfield>
+				<description>
+					<text>Constitution bonus</text>
+				</description>
+			</abilitybonus>
+			<abilitybonus name="intelligencebonus" source="abilities.intelligence.bonus">
+				<anchored>
+					<to>intelligence</to>
+				</anchored>
+				<scorefield>abilities.intelligence.score</scorefield>
+				<damagefield>abilities.intelligence.damage</damagefield>
+				<modifierfield>abilities.intelligence.bonusmodifier</modifierfield>
+				<description>
+					<text>Intelligence bonus</text>
+				</description>
+			</abilitybonus>
+			<abilitybonus name="wisdombonus" source="abilities.wisdom.bonus">
+				<anchored>
+					<to>wisdom</to>
+				</anchored>
+				<scorefield>abilities.wisdom.score</scorefield>
+				<damagefield>abilities.wisdom.damage</damagefield>
+				<modifierfield>abilities.wisdom.bonusmodifier</modifierfield>
+				<description>
+					<text>Wisdom bonus</text>
+				</description>
+			</abilitybonus>
+			<abilitybonus name="charismabonus" source="abilities.charisma.bonus">
+				<anchored>
+					<to>charisma</to>
+				</anchored>
+				<scorefield>abilities.charisma.score</scorefield>
+				<damagefield>abilities.charisma.damage</damagefield>
+				<modifierfield>abilities.charisma.bonusmodifier</modifierfield>
+				<description>
+					<text>Charisma bonus</text>
+				</description>
+			</abilitybonus>
+
+			<stringcontrol>
+				<anchored>
+					<to>strengthbonus</to>
+					<position>above</position>
+					<offset>5,2</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Bonus</static>
+				<center />
+			</stringcontrol>
+			<stringcontrol>
+				<anchored>
+					<to>strengthdamage</to>
+					<position>above</position>
+					<offset>5,2</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Damage</static>
+				<center />
+			</stringcontrol>
+
+			<!-- CLASSES -->
+			<genericcontrol name="classframe">
+				<bounds>255,90,145,200</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<stringcontrol name="classlabel">
+				<anchored>
+					<to>classframe</to>
+					<position>insidetopleft</position>
+					<offset>15,10</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Class</static>
+			</stringcontrol>
+			<stringcontrol name="levellabel">
+				<anchored>
+					<to>classframe</to>
+					<position>insidetopright</position>
+					<offset>20,10</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Level</static>
+			</stringcontrol>
+
+			<genericcontrol name="classanchor">
+				<anchored>
+					<to>classframe</to>
+					<position>insidetopleft</position>
+					<offset>10,19</offset>
+					<size>
+						<width>0</width>
+						<height>0</height>
+					</size>
+				</anchored>
+			</genericcontrol>
+
+			<classstring name="class1" source="classes.slot1.name">
+				<tabtarget>
+					<next>level1</next>
+					<prev>charismadamage</prev>
+				</tabtarget>
+			</classstring>
+			<levelnumber name="level1" source="classes.slot1.level">
+				<tabtarget>
+					<next>class2</next>
+					<prev>class1</prev>
+				</tabtarget>
+			</levelnumber>
+			<classstring name="class2" source="classes.slot2.name">
+				<tabtarget>
+					<next>level2</next>
+					<prev>level1</prev>
+				</tabtarget>
+			</classstring>
+			<levelnumber name="level2" source="classes.slot2.level">
+				<tabtarget>
+					<next>class3</next>
+					<prev>class2</prev>
+				</tabtarget>
+			</levelnumber>
+			<classstring name="class3" source="classes.slot3.name">
+				<tabtarget>
+					<next>level3</next>
+					<prev>level2</prev>
+				</tabtarget>
+			</classstring>
+			<levelnumber name="level3" source="classes.slot3.level">
+				<tabtarget>
+					<next>exp</next>
+					<prev>class3</prev>
+				</tabtarget>
+			</levelnumber>
+			
+			<stringcontrol>
+				<anchored>
+					<left>
+						<parent>classframe</parent>
+						<anchor>left</anchor>
+						<offset>15</offset>
+					</left>
+					<right>
+						<parent>classframe</parent>
+						<anchor>right</anchor>
+						<offset>-50</offset>
+					</right>
+					<top>
+						<parent>classanchor</parent>
+						<anchor>bottom</anchor>
+						<relation>current</relation>
+						<offset>7</offset>
+					</top>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Character level</static>
+			</stringcontrol>
+			<numberfield name="characterlevel">
+				<anchored>
+					<top>
+						<parent>classanchor</parent>
+						<anchor>bottom</anchor>
+						<relation>relative</relation>
+						<offset>3</offset>
+					</top>
+					<left>
+						<parent>classframe</parent>
+						<anchor>right</anchor>
+						<offset>-46</offset>
+					</left>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<font>sheetnumber</font>
+				<readonly />
+				<frame>
+					<name>bonus</name>
+					<offset>5,4,5,4</offset>
+				</frame>
+				<script>
+					function updateValue()
+						setValue(window.level1.getValue() + window.level2.getValue() + window.level3.getValue());
+					end
+				
+					function onInit()
+						updateValue();
+					end
+				</script>
+				<readonly />
+			</numberfield>
+			
+			<numberfield name="exp">
+				<anchored>
+					<to>classframe</to>
+					<position>insidetop</position>
+					<offset>-15,128</offset>
+					<size>
+						<height>20</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>bonus</name>
+					<offset>5,5,5,5</offset>
+				</frame>
+				<keyeditframe>
+					<name>sheetfocus</name>
+					<offset>5,5,5,5</offset>
+				</keyeditframe>
+				<font>sheetnumbersmall</font>
+				<noreset />
+				<stateframe>
+					<drophilight>
+						<name>sheetfocusplus</name>
+						<offset>5,5,5,5</offset>
+					</drophilight>
+				</stateframe>
+				<droptypes>
+					<type>number</type>
+				</droptypes>
+				<tabtarget>
+					<next>expneeded</next>
+					<prev>level3</prev>
+				</tabtarget>
+				<script>
+					function onDrop(x, y, draginfo)
+						if draginfo.isType("number") then
+							setValue(getValue() + draginfo.getNumberData());
+							return true;
+						end
+					end
+				</script>
+			</numberfield>
+			<numberfield name="expneeded">
+				<anchored>
+					<to>exp</to>
+					<position>below</position>
+					<offset>0,17</offset>
+					<size>
+						<height>20</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>modifier</name>
+					<offset>5,5,5,5</offset>
+				</frame>
+				<keyeditframe>
+					<name>sheetfocus</name>
+					<offset>5,5,5,5</offset>
+				</keyeditframe>
+				<font>sheetnumbersmall</font>
+				<noreset />
+				<stateframe>
+					<drophilight>
+						<name>sheetfocus</name>
+						<offset>5,5,5,5</offset>
+					</drophilight>
+				</stateframe>
+				<droptypes>
+					<type>number</type>
+				</droptypes>
+				<tabtarget>
+					<next>hp</next>
+					<prev>exp</prev>
+				</tabtarget>
+				<script>
+					function onHover(oncontrol)
+						if oncontrol then
+							local draginfo = Input.getDragData();
+							if draginfo and draginfo.isType("number") and draginfo.getNumberData() &lt; getValue() then
+								setColor("ffbb0000");
+							end
+						else
+							setColor(nil);
+						end
+					end
+					
+					function onDrop(x, y, draginfo)
+						if draginfo.isType("number") and draginfo.getNumberData() &gt; getValue() then
+							setValue(draginfo.getNumberData());
+						end
+
+						return true;
+					end
+				</script>
+			</numberfield>
+			
+			<stringcontrol>
+				<anchored>
+					<to>exp</to>
+					<position>aboveleft</position>
+					<offset>0,1</offset>
+				</anchored>
+				<static>Experience</static>
+				<font>sheetlabelsmall</font>
+			</stringcontrol>
+			<stringcontrol>
+				<anchored>
+					<to>expneeded</to>
+					<position>aboveleft</position>
+					<offset>0,1</offset>
+				</anchored>
+				<static>Needed for next</static>
+				<font>sheetlabelsmall</font>
+			</stringcontrol>
+						
+			<!-- HP -->
+			<genericcontrol name="hpframe">
+				<bounds>400,90,95,200</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<hitpointfield name="hp" source="hp.total">
+				<anchored>
+					<to>hpframe</to>
+					<position>insidetop</position>
+					<top>
+						<offset>28</offset>
+					</top>
+					<left>
+						<offset>18</offset>
+					</left>
+					<right>
+						<offset>-19</offset>
+					</right>
+					<size>
+						<height>30</height>
+					</size>
+				</anchored>
+				<noreset />
+				<tabtarget>
+					<next>wounds</next>
+					<prev>expneeded</prev>
+				</tabtarget>
+			</hitpointfield>
+			<stringcontrol>
+				<anchored>
+					<to>hp</to>
+					<position>aboveleft</position>
+					<offset>0,3</offset>
+				</anchored>
+				<static>Hit points</static>
+				<font>sheetlabelsmall</font>
+			</stringcontrol>
+
+			<hitpointfield name="wounds" source="hp.wounds">
+				<anchored>
+					<to>hpframe</to>
+					<position>insidetop</position>
+					<top>
+						<offset>81</offset>
+					</top>
+					<left>
+						<offset>18</offset>
+					</left>
+					<right>
+						<offset>-19</offset>
+					</right>
+					<size>
+						<height>30</height>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>subdual</next>
+					<prev>hp</prev>
+				</tabtarget>
+			</hitpointfield>
+			<stringcontrol>
+				<anchored>
+					<to>wounds</to>
+					<position>aboveleft</position>
+					<offset>0,3</offset>
+				</anchored>
+				<static>Wounds</static>
+				<font>sheetlabelsmall</font>
+			</stringcontrol>
+
+			<hitpointfield name="nonlethal" source="hp.nonlethal">
+				<anchored>
+					<to>hpframe</to>
+					<position>insidetop</position>
+					<top>
+						<offset>134</offset>
+					</top>
+					<left>
+						<offset>18</offset>
+					</left>
+					<right>
+						<offset>-19</offset>
+					</right>
+					<size>
+						<height>30</height>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>appearance</next>
+					<prev>wounds</prev>
+				</tabtarget>
+			</hitpointfield>
+			<stringcontrol>
+				<anchored>
+					<to>nonlethal</to>
+					<position>aboveleft</position>
+					<offset>0,3</offset>
+				</anchored>
+				<static>Nonlethal</static>
+				<font>sheetlabelsmall</font>
+			</stringcontrol>
+
+			<windowreferencecontrol>
+				<anchored>
+					<to>hpframe</to>
+					<position>insidetopleft</position>
+					<offset>28,173</offset>
+					<size>
+						<width>40</width>
+						<height>15</height>
+					</size>
+				</anchored>
+				<icon>
+					<normal>button_minisheet</normal>
+					<pressed>button_minisheet_down</pressed>
+				</icon>
+				<class>charsheetmini_main</class>
+				<tooltip>
+					<text>Minisheet</text>
+				</tooltip>
+				<nodrag />
+				<closetoggle />
+			</windowreferencecontrol>
+
+			<!-- AC -->
+			<genericcontrol name="acframe">
+				<bounds>15,290,220,110</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			
+			<modifiernumber name="ac" source="ac.totals.general">
+				<anchored>
+					<to>acframe</to>
+					<position>insidetopleft</position>
+					<offset>25,36</offset>
+					<size>
+						<width>45</width>
+						<height>40</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>acicon</name>
+					<offset>12,12,8,20</offset>
+				</frame>
+				<font>sheetnumber</font>
+				<description>
+					<text>Armor Class</text>
+				</description>
+				<modifierfield>ac.sources.temporary</modifierfield>
+				<source>
+					<name>abilities.dexterity.bonus</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>ac.sources.armor</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>ac.sources.shield</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>ac.sources.size</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>ac.sources.naturalarmor</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>ac.sources.deflection</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>ac.sources.misc</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>encumbrance.armormaxdexbonus</name>
+				</source>
+				<source>
+					<name>encumbrance.armormaxdexbonusactive</name>
+				</source>
+				<script>
+					function onSourceUpdate()
+						setValue(10 + calculateSources());
+					end
+					
+					function onSourceValue(source, sourcename)
+						if sourcename == "abilities.dexterity.bonus" then
+							local dex = source.getValue();
+							local max = sources["encumbrance.armormaxdexbonus"].getValue();
+							local maxactive = sources["encumbrance.armormaxdexbonusactive"].getValue();
+							
+							if maxactive == 0 or max > dex then
+								return dex;
+							else
+								return max;
+							end
+						else
+							return super.onSourceValue(source, sourcename);
+						end
+					end
+				</script>
+			</modifiernumber>
+			<stringcontrol>
+				<anchored>
+					<to>acframe</to>
+					<position>insidetopleft</position>
+					<offset>20,13</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Armor Class</static>
+			</stringcontrol>
+
+			<linkednumber name="flatfootedac" source="ac.totals.flatfooted">
+				<anchored>
+					<to>acframe</to>
+					<position>insidetopleft</position>
+					<offset>97,30</offset>
+					<size>
+						<width>32</width>
+						<height>22</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>bonus</name>
+					<offset>5,5,5,5</offset>
+				</frame>
+				<readonly />
+				<font>sheetnumber</font>
+				<description>
+					<text>Flat-footed Armor Class</text>
+				</description>
+				<source>
+					<name>abilities.dexterity.bonus</name>
+					<op>neg+</op>
+				</source>
+				<source>
+					<name>ac.sources.armor</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>ac.sources.shield</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>ac.sources.size</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>ac.sources.naturalarmor</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>ac.sources.deflection</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>ac.sources.misc</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>ac.sources.temporary</name>
+					<op>+</op>
+				</source>
+				<script>
+					function onSourceUpdate()
+						setValue(10 + calculateSources());
+					end
+				</script>
+			</linkednumber>
+			<stringcontrol>
+				<anchored>
+					<to>flatfootedac</to>
+					<position>righthigh</position>
+					<offset>8,5</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Flat-footed</static>
+			</stringcontrol>
+
+			<linkednumber name="touchac" source="ac.totals.touch">
+				<anchored>
+					<to>flatfootedac</to>
+					<position>below</position>
+					<offset>0,9</offset>
+					<size>
+						<height>22</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>bonus</name>
+					<offset>5,5,5,5</offset>
+				</frame>
+				<font>sheetnumber</font>
+				<readonly />
+				<description>
+					<text>Touch Armor Class</text>
+				</description>
+				<source>
+					<name>abilities.dexterity.bonus</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>ac.sources.size</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>ac.sources.deflection</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>ac.sources.misc</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>ac.sources.temporary</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>encumbrance.armormaxdexbonus</name>
+				</source>
+				<source>
+					<name>encumbrance.armormaxdexbonusactive</name>
+				</source>
+				<script>
+					function onSourceUpdate()
+						setValue(10 + calculateSources());
+					end
+					
+					function onSourceValue(source, sourcename)
+						if sourcename == "abilities.dexterity.bonus" then
+							local dex = source.getValue();
+							local max = sources["encumbrance.armormaxdexbonus"].getValue();
+							local maxactive = sources["encumbrance.armormaxdexbonusactive"].getValue();
+							
+							if maxactive == 0 or max > dex then
+								return dex;
+							else
+								return max;
+							end
+						else
+							return super.onSourceValue(source, sourcename);
+						end
+					end
+				</script>
+			</linkednumber>
+			<stringcontrol>
+				<anchored>
+					<to>touchac</to>
+					<position>righthigh</position>
+					<offset>8,5</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Touch attack</static>
+			</stringcontrol>
+
+			<!-- Saves -->
+			<genericcontrol name="savesframe">
+				<bounds>15,400,220,100</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			
+			<modifiernumber name="fortitudesave" source="saves.fortitude.total">
+				<anchored>
+					<to>savesframe</to>
+					<position>insidetopleft</position>
+					<offset>23,43</offset>
+					<size>
+						<width>46</width>
+						<height>34</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>bonus</name>
+					<offset>5,5,5,5</offset>
+				</frame>
+				<font>sheetnumber</font>
+				<displaysign />
+				<description>
+					<text>Fortitude save</text>
+				</description>
+				<modifierfield>saves.fortitude.temporary</modifierfield>
+				<source>
+					<name>saves.fortitude.base</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>abilities.constitution.bonus</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>saves.fortitude.misc</name>
+					<op>+</op>
+				</source>
+			</modifiernumber>
+			<stringcontrol>
+				<anchored>
+					<to>fortitudesave</to>
+					<position>above</position>
+					<offset>0,7</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Fortitude\rsave</static>
+				<center />
+				<multilinespacing>10</multilinespacing>
+			</stringcontrol>
+
+			<modifiernumber name="reflexsave" source="saves.reflex.total">
+				<anchored>
+					<to>fortitudesave</to>
+					<position>right</position>
+					<offset>18,0</offset>
+					<size>
+						<width>46</width>
+					</size>
+				</anchored>
+				<frame>
+					<name>bonus</name>
+					<offset>5,5,5,5</offset>
+				</frame>
+				<font>sheetnumber</font>
+				<displaysign />
+				<description>
+					<text>Reflex save</text>
+				</description>
+				<modifierfield>saves.reflex.temporary</modifierfield>
+				<source>
+					<name>saves.reflex.base</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>abilities.dexterity.bonus</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>saves.reflex.misc</name>
+					<op>+</op>
+				</source>
+			</modifiernumber>
+			<stringcontrol>
+				<anchored>
+					<to>reflexsave</to>
+					<position>above</position>
+					<offset>0,7</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Reflex\rsave</static>
+				<center />
+				<multilinespacing>10</multilinespacing>
+			</stringcontrol>
+
+			<modifiernumber name="willsave" source="saves.will.total">
+				<anchored>
+					<to>reflexsave</to>
+					<position>right</position>
+					<offset>18,0</offset>
+					<size>
+						<width>46</width>
+					</size>
+				</anchored>
+				<frame>
+					<name>bonus</name>
+					<offset>5,5,5,5</offset>
+				</frame>
+				<font>sheetnumber</font>
+				<displaysign />
+				<description>
+					<text>Will save</text>
+				</description>
+				<modifierfield>saves.will.temporary</modifierfield>
+				<source>
+					<name>saves.will.base</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>abilities.wisdom.bonus</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>saves.will.misc</name>
+					<op>+</op>
+				</source>
+			</modifiernumber>
+			<stringcontrol>
+				<anchored>
+					<to>willsave</to>
+					<position>above</position>
+					<offset>0,7</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Will\rsave</static>
+				<center />
+				<multilinespacing>10</multilinespacing>
+			</stringcontrol>
+
+			<!-- Combat -->
+			<genericcontrol name="combatframe">
+				<bounds>235,290,100,210</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<linkednumber name="initiative" source="initiative.total">
+				<anchored>
+					<to>combatframe</to>
+					<position>insidetop</position>
+					<offset>-20,32</offset>
+					<size>
+						<height>30</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>bonus</name>
+					<offset>5,5,5,5</offset>
+				</frame>
+				<font>sheetnumber</font>
+				<displaysign />
+				<description>
+					<text>Initiative</text>
+				</description>
+				<readonly />
+				<source>
+					<name>abilities.dexterity.bonus</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>initiative.misc</name>
+					<op>+</op>
+				</source>
+			</linkednumber>
+			<stringcontrol>
+				<anchored>
+					<to>initiative</to>
+					<position>aboveleft</position>
+					<offset>0,3</offset>
+				</anchored>
+				<static>Initiative</static>
+				<font>sheetlabelsmall</font>
+			</stringcontrol>
+
+			<linkednumber name="meleeattackbonus" source="attackbonus.melee">
+				<anchored>
+					<to>combatframe</to>
+					<position>insidetop</position>
+					<offset>-20,100</offset>
+					<size>
+						<height>30</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>bonus</name>
+					<offset>5,5,5,5</offset>
+				</frame>
+				<font>sheetnumber</font>
+				<displaysign />
+				<readonly />
+				<description>
+					<text>Melee attack</text>
+				</description>
+				<source>
+					<name>attackbonus.base</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>abilities.strength.bonus</name>
+					<op>+</op>
+				</source>
+			</linkednumber>
+			<stringcontrol>
+				<anchored>
+					<to>meleeattackbonus</to>
+					<position>aboveleft</position>
+					<offset>0,3</offset>
+				</anchored>
+				<static>Melee attack</static>
+				<font>sheetlabelsmall</font>
+			</stringcontrol>
+
+			<linkednumber name="rangeattackbonus" source="attackbonus.ranged">
+				<anchored>
+					<to>combatframe</to>
+					<position>insidetop</position>
+					<offset>-20,155</offset>
+					<size>
+						<height>30</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>bonus</name>
+					<offset>5,5,5,5</offset>
+				</frame>
+				<font>sheetnumber</font>
+				<displaysign />
+				<readonly />
+				<description>
+					<text>Ranged attack</text>
+				</description>
+				<source>
+					<name>attackbonus.base</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>abilities.dexterity.bonus</name>
+					<op>+</op>
+				</source>
+			</linkednumber>
+			<stringcontrol>
+				<anchored>
+					<to>rangeattackbonus</to>
+					<position>aboveleft</position>
+					<offset>0,3</offset>
+				</anchored>
+				<static>Ranged attack</static>
+				<font>sheetlabelsmall</font>
+			</stringcontrol>
+
+			<!-- Languages -->
+			<genericcontrol name="languageframe">
+				<bounds>335,290,160,210</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<stringcontrol name="languagelabel">
+				<anchored>
+					<to>languageframe</to>
+					<position>insidetop</position>
+					<offset>0,10</offset>
+				</anchored>
+				<font>sheetlabel</font>
+				<static>Languages</static>
+				<center />
+			</stringcontrol>
+
+			<windowlist name="languagelist">
+				<anchored>
+					<to>languageframe</to>
+					<position>over</position>
+					<offset>-12,-9</offset>
+					<top>
+						<parent>languageframe</parent>
+						<offset>25</offset>
+					</top>
+				</anchored>
+				<datasource>.languagelist</datasource>
+				<class>charsheet_languagelistitem</class>
+				<allowcreate />
+				<script>
+					function onSortCompare(w1, w2)
+						if w1.name.getValue() == "" then
+							return true;
+						elseif w2.name.getValue() == "" then
+							return false;
+						end
+					
+						return w1.name.getValue() &gt; w2.name.getValue();
+					end
+					
+					function onClickDown(button, x, y)
+						if not getNextWindow(nil) then
+							createWindow().name.setFocus();
+							return true;
+						end
+					end
+				</script>
+			</windowlist>
+			<scrollercontrol>
+				<anchored>
+					<to>languagelist</to>
+					<position>insidebottomright</position>
+					<size>
+						<width>45</width>
+						<height>27</height>
+					</size>
+				</anchored>
+				<target>languagelist</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+
+
+			<!-- Appearance -->
+			<genericcontrol name="appearanceframe">
+				<bounds>15,500,480,90</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			
+			<stringcontrol name="appearancelabel">
+				<anchored>
+					<to>appearanceframe</to>
+					<position>insidetop</position>
+					<offset>0,9</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Appearance</static>
+				<center />
+			</stringcontrol>
+
+			<stringfield name="appearance">
+				<anchored>
+					<to>appearanceframe</to>
+					<position>over</position>
+					<offset>-14,-10</offset>
+					<top>
+						<offset>22</offset>
+					</top>
+				</anchored>
+				<multilinespacing>20</multilinespacing>
+				<font>sheettext</font>
+				<frame>
+					<name>textline</name>
+					<offset>2,0,2,0</offset>
+				</frame>
+				<tabtarget>
+					<next>name</next>
+					<prev>subdual</prev>
+				</tabtarget>
+			</stringfield>
+		</sheetdata>
+	</windowclass>
+</root>
